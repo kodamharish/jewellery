@@ -1,0 +1,495 @@
+{% extends './base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+
+    <style>
+        .container {
+            margin-left: 250px;
+
+        }
+
+        label {
+            width: 150px;
+        }
+
+        .inline {
+            display: flex;
+            margin: 25px;
+        }
+
+        .border-radius {
+            border-radius: 8px;
+        }
+
+        .select {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+
+        }
+        .ml{
+            margin-left:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="#home">Member </a></li>
+            <li><a data-toggle="pill" href="#menu1">Nominee</a></li>
+            <!-- <li><a data-toggle="pill" href="#menu2">Menu 2</a></li> -->
+            <!-- <li><a data-toggle="pill" href="#menu3">Menu 3</a></li> -->
+        </ul>
+
+        {% for msg in messages %}
+        <p class="text-danger mt-2 fw-bold text-center">{{msg}}</p>
+        {% endfor %}
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mt-5 mb-5">
+
+
+                        <div class="col-md-6">
+
+                            <!-- <div class="mb-3 inline">
+                                <label for="scheme_name">Scheme Name</label>
+                                <select class="form-select select w-50" name="scheme_name" onchange="saveSchemeInSession()"  id="scheme-dropdown">
+                                    <option>Select</option>
+
+                                    {% if selected_scheme_id %}
+                                    <option value="{{ selected_scheme_id }}">{{selected_scheme_id }} </option>
+
+                                    {% endif %}
+
+                                    {% for scheme in schemes %}
+
+                                    <option value="{{ scheme.scheme_name}}">{{ scheme.scheme_name }}</option>
+                                    
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <button type="button" class="btn btn-info ml" data-toggle="modal"
+                                    data-target="#addScheme"><i class="fas fa-plus"></i></button>
+
+                            </div> -->
+
+
+                            <div class="mb-3 inline">
+                                <label for="scheme_name">Scheme Name</label>
+                                <select class="form-select select w-50" name="scheme_name" onchange="saveSchemeInSession()" id="scheme-dropdown">
+                                    <option>Select</option>
+                            
+                                    {% if selected_scheme_id %}
+                                    <option value="{{ selected_scheme_id }}" selected>{{ selected_scheme_id }}</option>
+                                    {% endif %}
+                            
+                                    {% for scheme in schemes %}
+                                    <option value="{{ scheme.scheme_name }}" 
+                                        {% if scheme.scheme_name == selected_scheme_id %}selected{% endif %}>
+                                        {{ scheme.scheme_name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            
+                                <button type="button" class="btn btn-info ml" data-toggle="modal" data-target="#addScheme">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="member_group">Member Group</label>
+                                <!-- <input type="text" class="form-control w-50" name="member_group" > -->
+                                <select class="form-select select w-50" name="member_group">
+                                    <option>Select</option>
+                                    {% for group in groups %}
+                                    
+
+                                    <option value="{{ group.group_name}}">{{ group.group_name }}</option>
+
+                                    {% endfor %}
+
+
+                                </select>
+
+
+                                <button type="button" class="btn btn-info ml" data-toggle="modal"
+                                    data-target="#addGroup"><i class="fas fa-plus"></i></button>
+
+
+
+
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="member_name">Member Name</label>
+                                <input type="text" class="form-control w-50" name="member_name">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="member_no">Member No</label>
+                                <input type="text" class="form-control w-50" name="member_no">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control w-50" name="email">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="phone_number1">Phone Number 1</label>
+                                <input type="number" class="form-control w-50" name="phone_number1">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="phone_number2">Phone Number 2</label>
+                                <input type="number" class="form-control w-50" name="phone_number2">
+                            </div>
+
+
+
+                            <div class="mb-3 inline">
+                                <label for="referral_name">Referral Name</label>
+                                <input type="text" class="form-control w-50" name="referral_name">
+                            </div>
+
+                            <div class="mb-3 inline">
+                                <label for="wtc">Wt Conversion</label>
+                                <input type="text" class="form-control w-50" name="wtc">
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3 inline">
+                                <label for="scheme_id">Scheme ID</label>
+                                <select class="form-select select w-50" name="scheme_id">
+                                    <option>Select</option>
+
+                                    {% for scheme in schemes %}
+                                    <option value="{{ scheme.scheme_id}}">{{ scheme.scheme_id}} - {{scheme.scheme_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="aadhaar">Aadhaar</label>
+                                <input type="text" class="form-control w-50" name="aadhaar">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="pan">PAN</label>
+                                <input type="text" class="form-control w-50" name="pan">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="address">Address </label>
+
+                                <textarea class="form-control w-50" name="address"></textarea>
+                            </div>
+                            <div class="mb-3 inline">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control w-50" name="city">
+                            </div>
+
+                            <div class="mb-3 inline">
+                                <label for="pin">PIN</label>
+                                <input type="number" class="form-control w-50" name="pin">
+                            </div>
+
+
+
+                            <div class="mb-3 inline">
+                                <label for="referral_number">Referral Number</label>
+                                <input type="text" class="form-control w-50" name="referral_number">
+                            </div>
+
+
+                            <div class="mb-3 inline">
+                                <label for="metal">Metal</label>
+                                <input type="text" class="form-control w-50" name="metal">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5 mb-3">
+                        <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
+                            style="width:15%">Submit</button>
+                    </div>
+                </form>
+
+
+            </div>
+            <div id="menu1" class="tab-pane fade">
+
+                <form method="post" action="{% url 'add_nominee' %}">
+                    {% csrf_token %}
+                    <div class="row mt-5 mb-5">
+
+
+                        <div class="col-md-6">
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_name"> Name</label>
+                                <input type="text" class="form-control w-50" name="nominee_name">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_email">Email</label>
+                                <input type="email" class="form-control w-50" name="nominee_email">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="phone_number">Phone Number </label>
+                                <input type="number" class="form-control w-50" name="phone_number">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="dob">DOB</label>
+                                <input type="date" class="form-control w-50" name="dob">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="staff_p">Staff Promote</label>
+                                <input type="text" class="form-control w-50" name="staff_p">
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="pay">Pay Mode</label>
+                                <input type="text" class="form-control w-50" name="pay">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="route">Route</label>
+                                <input type="text" class="form-control w-50" name="route">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="payf">Pay Fallowup</label>
+                                <input type="number" class="form-control w-50" name="payf">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="status">Status</label>
+                                <input type="number" class="form-control w-50" name="status">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="exst_mem">Existing Member</label>
+                                <input type="number" class="form-control w-50" name="exst_mem">
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5 mb-3">
+                        <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
+                            style="width:15%">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <!-- <div id="menu2" class="tab-pane fade">
+      <h3>Menu 2</h3>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+    </div> -->
+            <!-- <div id="menu3" class="tab-pane fade">
+      <h3>Menu 3</h3>
+      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    </div> -->
+        </div>
+    </div>
+
+
+    <!-- Scheme Modal -->
+    <div class="modal fade" id="addScheme" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <h4 class="modal-title">Add Scheme Name</h4>
+                </div>
+                <form method="post" action="{% url 'add_scheme' %}">
+                    {% csrf_token %}
+
+                    <div class="modal-body">
+                        
+
+                        <div class="mb-3 mt-3 inline">
+                            <label for="add_scheme_name">Scheme Name</label>
+                            <input type="text" class="form-control w-50" name="add_scheme_name">
+                        </div>
+
+                        <div class="text-center mt-5 mb-3">
+                            <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
+                                style="width:15%">Submit</button>
+                        </div>
+                    </div>
+
+
+                </form>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Group Modal -->
+    <div class="modal fade" id="addGroup" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <h4 class="modal-title">Add Group Name</h4>
+                </div>
+                <form method="post" action="{% url 'add_group' %}">
+                    {% csrf_token %}
+
+                    <div class="modal-body">
+                        
+
+                        
+
+                        <div class="mb-3 mt-3 inline">
+                            <label for="add_group_name">Group Name</label>
+                            <input type="text" class="form-control w-50" name="add_group_name">
+                        </div>
+
+                        <div class="mb-3 mt-3 inline">
+                            <label for="add_group_name">Scheme Name</label>
+                            <input type="text" class="form-control w-50" value="{{selected_scheme_id}}" name="add_group_scheme_name" readonly>
+                        </div>
+                        
+
+                        <div class="text-center mt-5 mb-3">
+                            <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
+                                style="width:15%">Submit</button>
+                        </div>
+                    </div>
+
+
+                </form>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    
+    <!-- <script>
+        function saveSchemeInSession() {
+            const dropdown = document.getElementById('scheme-dropdown');
+            const selectedSchemeId = dropdown.value;
+            console.log('hello')
+    
+            if (selectedSchemeId) {
+                fetch(`/save-scheme/?scheme_id=${selectedSchemeId}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'  // CSRF token is not needed for GET requests, but can be included for consistency
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Scheme saved in session');
+                    } else {
+                        console.error('Failed to save scheme');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+     -->
+
+
+     <script>
+        function saveSchemeInSession() {
+            const dropdown = document.getElementById('scheme-dropdown');
+            const selectedSchemeId = dropdown.value;
+            console.log('hello')
+        
+            if (selectedSchemeId) {
+                fetch(`/save-scheme/?scheme_id=${selectedSchemeId}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'  // CSRF token is not needed for GET requests, but can be included for consistency
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Scheme saved in session');
+                        // Reload the page after successfully saving the scheme
+                        window.location.reload(); 
+                    } else {
+                        console.error('Failed to save scheme');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+        
+     </script>
+
+</body>
+
+</html>
+
+{% endblock content %}

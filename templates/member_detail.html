@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Details</title>
+    <style>
+        .member-info {
+            margin-bottom: 20px;
+        }
+        .barcode {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Member Details</h1>
+
+    <div class="member-info">
+        <p><strong>Member Number:</strong> {{ member.number }}</p>
+        <p><strong>Name:</strong> {{ member.name }}</p>
+        <p><strong>Group:</strong> {{ member.group }}</p>
+        <p><strong>Phone:</strong> {{ member.phno1 }}</p>
+    </div>
+
+    <div class="barcode">
+        <h2>Barcode:</h2>
+        <img src="{% url 'generate_member_barcode' member.id %}" alt="Member Barcode">
+    </div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewel Saving Club - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Cinzel', serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container-fluid {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row {
+            flex-grow: 1;
+        }
+
+        .bg-image {
+            background-image: url('https://i.pinimg.com/736x/db/08/ac/db08ac5800b059e978a553befb885b62.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .bg-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.153);
+        }
+
+        .login-container {
+            background-color: rgba(26, 26, 46, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-weight: 700;
+            color: #0084ff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .jewel-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .jewel {
+            width: 40px;
+            height: 40px;
+            background-color: #0051ff;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: sparkle 2s infinite;
+        }
+
+        .jewel:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .jewel:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-bottom: 2px solid #0044ff;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            border-color: #fff;
+        }
+
+        .form-control::placeholder {
+            color: #a0a0a0;
+        }
+
+        .btn-primary {
+            background-color: #adc5f1;
+            border-color: #3458b2;
+            color: #1a1a2e;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            border-color: #fff;
+            color: #1a1a2e;
+        }
+
+        #forgotPassword {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        #forgotPassword:hover {
+            color: #ff0011;
+        }
+
+        @media (max-width: 767px) {
+            .bg-image {
+                min-height: 150px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .jewel {
+                width: 30px;
+                height: 30px;
+            }
+
+            .login-form {
+                padding: 1rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .row {
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 bg-image"></div>
+            <div class="col-md-6 login-container">
+                <div class="login-form">
+                    <h1 class="text-center">Jewel Saving Club</h1>
+                    <div class="jewel-container">
+                        <div class="jewel"></div>
+                        <div class="jewel"></div>
+                        <div class="jewel"></div>
+                    </div>
+                    <form id="loginForm" method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        {% for msg in messages %}
+                        <p class="text-danger text-center mt-2 fw-bold" style="font-size: 0.9rem;">{{ msg }}</p>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <div class="text-center">
+                        <a href="#" id="forgotPassword">Forgot Password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm');
+            const forgotPasswordLink = document.getElementById('forgotPassword');
+            const jewels = document.querySelectorAll('.jewel');
+
+            loginForm.addEventListener('submit', function (e) {
+                //e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+
+                //console.log('Login attempt:', { username, password, rememberMe });
+
+
+                jewels.forEach(jewel => {
+                    jewel.style.animation = 'none';
+                    jewel.offsetHeight; // Trigger reflow
+                    jewel.style.animation = 'sparkle 0.5s infinite';
+                });
+
+
+                setTimeout(() => {
+                    alert(`Welcome to Jewel Saving Club, ${username}!`);
+
+                    jewels.forEach(jewel => {
+                        jewel.style.animation = 'sparkle 2s infinite';
+                    });
+                }, 1500);
+            });
+
+
+            forgotPasswordLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                alert('Password recovery feature coming soon!');
+            });
+
+
+            const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function () {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                input.addEventListener('blur', function () {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

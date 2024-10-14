@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Card</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        
+        .card-container {
+            background-color: #fff;
+            width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            border-top: 10px solid #0083ca;
+            border-bottom: 10px solid #0083ca;
+            border-left: 1px solid #000000;
+            border-right: 1px solid #000000;
+
+        }
+        
+        .card-header {
+            margin-bottom: 20px;
+        }
+        
+        .company-logo {
+            width: 90px;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .profile-section {
+            margin-bottom: 20px;
+        }
+        
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 4px solid #0083ca;
+        }
+        
+        h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .designation {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0083ca;
+        }
+        
+        .contact-info {
+            margin-bottom: 20px;
+            text-align: center; /* Aligns the text to the left */
+        }
+        
+        .contact-info p {
+            font-size: 14px;
+            color: #333; /* You can adjust the color as needed */
+            
+            margin: 8px 0; /* Adjusts spacing between lines */
+        }
+        
+        .contact-info strong {
+            color: #000033; /* Darker text for labels */
+            font-weight: bold;
+        }
+        
+
+        .barcode-section {
+            margin: 20px 0;
+        }
+        
+        .barcode {
+            width: 180px;
+            height: 80px;
+        }
+        
+        
+
+        .website {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid #0083ca; /* Blue top border */
+        }
+        
+        .website p {
+            font-size: 14px;
+            color: #0083ca;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card-header">
+            <img src="{% static 'images/logo.png' %}" alt="Creative Company Logo" class="company-logo">
+            <!-- <h2>Creative Company</h2> -->
+        </div>
+
+        <div class="profile-section">
+            <img src="{% static 'images/p1.png' %}" alt="Profile Picture" class="profile-picture">
+            <h3>Rakesh</h3>
+            <p class="designation"></p>
+        </div>
+
+        <div class="contact-info">
+            <p><strong>Mem No</strong> : 1234567890</p>
+            <p><strong>Scheme No</strong> : 1234567890</p>
+            <p><strong>Group</strong> : DS</p>
+
+            <p><strong>Email</strong> : 12345@gmail.com</p>
+            <p><strong>Phone</strong> : 123456789</p>
+        </div>
+        
+
+        <div class="barcode-section">
+            <img src="{% static 'images/bc1.jpeg'%}" alt="Barcode" class="barcode">
+            
+
+        </div>
+
+
+        <div class="website">
+            <p>www.iiiqbets.com</p>
+        </div>
+    </div>
+</body>
+</html>

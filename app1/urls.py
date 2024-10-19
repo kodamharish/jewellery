@@ -12,19 +12,26 @@ urlpatterns = [
     path('installment_remainder',installment_remainder,name="installment_remainder"),
     path('member_details',member_details,name="member_details"),
     path('recepit/',recepit,name="recepit"),
+    path('recepit_form/<int:id>/',recepit_form,name="recepit_form"),
+    #path('recepit_form/<int:member_id>/<int:scheme_id>/',recepit_form,name="recepit_form"),
+
+
     path('add_member',add_member,name="add_member"),
+    path('edit_member/<int:id>/',edit_member,name="edit_member"),
+
     path('add_scheme',add_scheme,name="add_scheme"),
-    path('add_group',add_group,name="add_group"),
+    path('scheme_refund/',scheme_refund,name="scheme_refund"),
+    path('scheme_refund_form/<int:id>/',scheme_refund_form,name="scheme_refund_form"),
+    path('transactions/<int:id>/<str:scheme_name>/',transactions,name="transactions"),
 
 
     path('add_nominee',add_nominee,name="add_nominee"),
     path('tag',tag,name="tag"),
     path('barcode/<str:member_id>/', generate_member_barcode, name='generate_member_barcode'),
     path('member/<str:member_id>/', member_detail_with_barcode, name='member_detail_with_barcode'),
+    path('member/<str:member_id>/qrcode', generate_member_qrcode, name='generate_member_qrcode'),
 
-    path('save-scheme/', save_scheme, name='save_scheme'),
-
-
+    
 
 
 

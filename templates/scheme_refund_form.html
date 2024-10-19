@@ -1,0 +1,151 @@
+{% extends './base.html' %}
+{% block content %}
+
+<style>
+    .container {
+        margin-left: 250px;
+
+    }
+
+    label {
+        width: 150px;
+    }
+
+    .inline {
+        display: flex;
+        margin: 25px;
+    }
+
+    .border-radius {
+        border-radius: 8px;
+    }
+
+    .select {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+
+    }
+    .ml{
+        margin-left:10px;
+    }
+</style>
+
+<div class="container mt-5">
+
+    {% for msg in messages %}
+        <p class="text-danger mt-2 fw-bold text-center">{{msg}}</p>
+        {% endfor %}
+
+
+    <form method="post">
+        {% csrf_token %}
+
+
+    <div class="row mt-5 mb-5">
+        <div class="col-md-6">
+
+            <div class="mb-3 mt-3 inline">
+                <label for="refund_date" class="form-label">Date</label>
+                <input type="date" class="form-control w-50" id="refund_date" name="refund_date" value="{{ current_date|date:'Y-m-d' }}">
+            </div>
+
+            <div class="mb-3 mt-3 inline">
+                <label for="member_name">Member Name</label>
+                <input type="text" class="form-control w-50" name="member_name" value="{{member.name}}">
+            </div>
+            <div class="mb-3 mt-3 inline">
+                <label for="email">Email</label>
+                <input type="email" class="form-control w-50" name="email" value="{{member.email}}">
+            </div>
+
+            <div class="mb-3 mt-3 inline">
+                <label for="maturity_period">Maturity Period</label>
+                <input type="text" class="form-control w-50" name="maturity_period" value="{{member.end_date|date:'Y-m-d'}}">
+            </div>
+
+            <div class="mb-3 mt-3 inline">
+                <label for="total_amount_received">Total Amount Received</label>
+                <input type="text" class="form-control w-50" name="total_amount_received" value="{{total_amount}}">
+            </div>
+            
+            
+
+
+           
+
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="mb-3 mt-3 inline">
+                <label for="member_id">Member ID</label>
+                <input type="text" class="form-control w-50" name="member_id" value="{{member.id}}">
+            </div>
+
+            <div class="mb-3 mt-3 inline">
+                <label for="scheme_name">Scheme Name</label>
+                <input type="text" class="form-control w-50" name="scheme_name" value="{{member.scheme.scheme_name}}">
+            </div>
+            <div class="mb-3 mt-3 inline">
+                <label for="phone_number">Phone Number </label>
+                <input type="number" class="form-control w-50" name="phone_number" value="{{member.phone_number}}">
+            </div>
+
+            
+
+
+            <div class="mb-3 inline">
+                <label for="refund_by">Refund By</label>
+                <select class="form-select select w-50" name="refund_by" >
+                    <option value="">Select</option>
+                    
+                        <option value="cash">Cash</option>
+                        <option value="sales">Sales</option>
+
+                    
+                </select>
+            
+                
+            </div>
+
+            
+
+            
+
+            
+
+
+
+        </div>
+    </div>
+
+    <div class="row m-3">
+        <div class="col-md-5"></div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+        <div class="col-md-5"></div>
+    </div>
+
+   </form>
+    
+</div>
+{% endblock content %}

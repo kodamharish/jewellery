@@ -178,7 +178,7 @@
             var scheme = memberCard.querySelector('p:nth-of-type(2)').innerText;
             var joinDate = memberCard.querySelector('p:nth-of-type(3)').innerText;
             var lastPayment = memberCard.querySelector('p:nth-of-type(4)').innerText;
-            var status = memberCard.querySelector('p:nth-of-type(5)').innerText;
+            
             var barcodeSrc = memberCard.querySelector('img').src;
 
             // Create the printable ID card HTML
@@ -220,8 +220,8 @@
                         }
                         .id-card img {
                             margin-top: 15px;
-                            width: 250px;
-                            height: 100px;
+                            width: 200px;
+                            height: 200px;
                         }
                     </style>
                 </head>
@@ -255,33 +255,44 @@
 </head>
 <body>
     <div class="container mt">
-        <div class="search-bar">
-            <input type="text" placeholder="Search for members...">
-        </div>
+        {% for msg in messages %}
+                        <p class="text-danger text-center  fw-bold" style="font-size: 0.8rem;">{{ msg }}</p>
+            {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <form method="GET" action="/member_details">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for members..." name="search" id="searchInput" value="{{ request.GET.search }}">
 
-        <div class="filters">
-            <form method="get">
-                <div class="filter-group">
-                    <label for="status">Status:</label>
-                    <select id="status" name="status">
-                        <option value="all">All</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
+                    <button class="btn btn-primary" type="submit" >Search</button>
                 </div>
-            </form>
-            <div class="filter-group">
-                <label for="gold-amount">Gold Amount:</label>
-                <select id="gold-amount">
-                    <option value="all">All</option>
-                    <option value="0-10">0-10g</option>
-                    <option value="10-50">10-50g</option>
-                    <option value="50+">50g+</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="join-date">Join Date:</label>
-                <input type="date" id="join-date">
+                </form>
+        
+                <div class="filters">
+                    <form method="get">
+                        <div class="filter-group">
+                            <label for="status">Status:</label>
+                            <select id="status" name="status">
+                                <option value="all">All</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </form>
+                    <!-- <div class="filter-group">
+                        <label for="gold-amount">Gold Amount:</label>
+                        <select id="gold-amount">
+                            <option value="all">All</option>
+                            <option value="0-10">0-10g</option>
+                            <option value="10-50">10-50g</option>
+                            <option value="50+">50g+</option>
+                        </select>
+                    </div> -->
+                    <div class="filter-group">
+                        <label for="join-date">Join Date:</label>
+                        <input type="date" id="join-date">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -289,19 +300,20 @@
             {% for member in members %}
             <div class="member-card" data-member-number="{{ member.id }}">
                 <h2>{{ member.name|title }}</h2>
-                <p><strong>Group:</strong> {{ member.group }}</p>
-                <p><strong>Scheme Name:</strong> {{ member.scheme_name }}</p>
+                
+                <p><strong>Scheme Name:</strong> {{ member.scheme.scheme_name }}</p>
                 <p><strong>Join Date:</strong> {{ member.join_date|date:'d-m-Y' }}</p>
-                <p><strong>Last Payment:</strong> {{ member.last_payment|date:'Y-m-d' }}</p>
+                <!-- <p><strong>Last Payment:</strong> {{ member.last_payment|date:'Y-m-d' }}</p> -->
+                <p><strong>Referral Code </strong> {{ member.member_referral_code }}</p>
                 <p><strong>Status:</strong> {{ member.status|title }}</p>
 
                 <!-- Hide the barcode on the main page -->
-                <img id="barcode-{{ member.id }}" src="{% url 'generate_member_barcode' member.id %}" alt="Member Barcode" class="barcode">
+                <img id="barcode-{{ member.id }}" src="{% url 'generate_member_qrcode' member.id %}" alt="Member Barcode" class="barcode">
 
                 <div class="action-buttons">
                     <button class="btn btn-primary">View Details</button>
-                    <button class="btn btn-secondary" onclick="printBarcode('{{ member.id }}')">Print</button>
-                    <button class="btn btn-secondary">Edit</button>
+                    <button class="btn btn-primary" onclick="printBarcode('{{ member.id }}')">Print</button>
+                    <button class="btn btn-primary"><a href="{% url 'edit_member' member.id %}" style="color:white;text-decoration:none;">Edit</a></button>
                 </div>
             </div>
             {% endfor %}

@@ -194,7 +194,6 @@ table.dataTable {
                 <tr>
                     <th>Member ID</th>
                     
-                    <th>Group</th>
                     <th>Name</th>
                     <th>Mobile</th>
                     <!-- <th>GrpPDay</th>
@@ -211,9 +210,8 @@ table.dataTable {
                 {% for member in members %}
                 <tr>
                     <td>{{member.id}}</td>
-                    <td>{{member.group}}</td>
                     <td>{{member.name}}</td>
-                    <td>{{member.phno1}}</td>
+                    <td>{{member.phone_number}}</td>
                     <!-- <td>1</td>
                     <td>30-08-2024</td> -->
                     <td>04-09-2024</td>

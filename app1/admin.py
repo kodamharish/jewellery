@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,Transaction,Member,Scheme,Group
+
 from .models import *
 
 # Register your models here.
@@ -15,15 +15,15 @@ admin.site.register(User, UserAdmin)
 
 
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'group', 'address', 'city', 'phno1', 'email', 'installment', 'status', 'join_date')
-    readonly_fields = ('join_date',)
+    list_display = ('id', 'name', 'join_date','end_date', 'scheme','phone_number', 'email', 'status','member_referral_code' )
+    
 
 admin.site.register(Member, MemberAdmin)
 
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('trasaction_id','voucher_no','member_name','member_number')
+    list_display = ('transaction','voucher_no','member')
     readonly_fields = ('receipt_time',)
 
 admin.site.register(Transaction, TransactionAdmin)
@@ -36,11 +36,11 @@ class SchemeAdmin(admin.ModelAdmin):
 admin.site.register(Scheme, SchemeAdmin)
 
 
-
-class GroupAdmin(admin.ModelAdmin):
-    list_display = ('group_id','group_name','scheme')
+class RefundAdmin(admin.ModelAdmin):
+    list_display = ('id','member','scheme_name')
     
-admin.site.register(Group,GroupAdmin)
+admin.site.register(Refund,RefundAdmin)
+
 
 class RateAdmin(admin.ModelAdmin):
     list_display = ('id','purity')

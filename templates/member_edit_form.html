@@ -1,0 +1,230 @@
+{% extends './base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .container {
+            margin-left: 250px;
+
+        }
+
+        label {
+            width: 150px;
+        }
+
+        .inline {
+            display: flex;
+            margin: 25px;
+        }
+
+        .border-radius {
+            border-radius: 8px;
+        }
+
+        .select {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+
+        }
+        .ml{
+            margin-left:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        {% for msg in messages %}
+        <p class="text-danger mt-2 fw-bold text-center">{{msg}}</p>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mt-5 mb-5">
+
+
+                        <div class="col-md-6">
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="join_date" class="form-label">Date</label>
+                                <input type="date" class="form-control w-50" id="join_date" name="join_date" value="{{ member.join_date|date:'Y-m-d' }}">
+                            </div>
+
+                    
+
+                            <div class="mb-3 inline">
+                                <label for="scheme_name">Scheme Name</label>
+                                <select class="form-select select w-50" name="scheme_name" >
+                                   
+                                    <option value="{{ member.scheme.scheme_name}}" selected>{{ member.scheme.scheme_name}}</option>
+
+
+                                    {% for scheme in schemes %}
+                                        <option value="{{ scheme.scheme_name }}">{{ scheme.scheme_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            
+                                
+                            </div>
+                            
+                            <div class="mb-3 mt-3 inline">
+                                <label for="member_name">Member Name</label>
+                                <input type="text" class="form-control w-50" name="member_name" value="{{ member.name}}">
+                            </div>
+
+                            
+                            <div class="mb-3 mt-3 inline">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control w-50" name="email" value="{{ member.email}}">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="phone_number">Phone Number </label>
+                                <input type="number" class="form-control w-50" name="phone_number" value="{{ member.phone_number}}">
+                            </div>
+                            
+
+
+
+                            <div class="mb-3 inline">
+                                <label for="referred_person_name">Referral Member Name</label>
+                                <input type="text" class="form-control w-50" name="referred_person_name" value="{{ member.referred_person_name}}">
+                            </div>
+
+                            <div class="mb-3 inline">
+                                <label for="referred_person_referral_code">Referred Member Referral Code</label>
+                                <input type="text" class="form-control w-50" name="referred_person_referral_code" value="{{ member.referred_person_referral_code}}">
+                            </div>
+
+                            
+
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="aadhaar">Aadhaar</label>
+                                <input type="text" class="form-control w-50" name="aadhaar" value="{{ member.aadhaar}}">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="pan">PAN</label>
+                                <input type="text" class="form-control w-50" name="pan" value="{{ member.pan}}">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="address">Address </label>
+
+                                <textarea class="form-control w-50" name="address">{{member.address}}</textarea>
+                            </div>
+                            <div class="mb-3 inline">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control w-50" name="city" value="{{member.city}}">
+                            </div>
+
+                            <div class="mb-3 inline">
+                                <label for="pin">PIN</label>
+                                <input type="number" class="form-control w-50" name="pin" value="{{member.pin}}">
+                            </div>
+
+                            
+
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-5 mb-5">
+                        <h4 style="text-align:center;color:green">Nominee Details</h4>
+
+
+                        <div class="col-md-6">
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_name"> Name</label>
+                                <input type="text" class="form-control w-50" name="nominee_name" value="{{member.nominee_name}}">
+                            </div>
+
+                            
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_email">Email</label>
+                                <input type="email" class="form-control w-50" name="nominee_email" value="{{member.nominee_email}}">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_pan">PAN Number</label>
+                                <input type="text" class="form-control w-50" name="nominee_pan" value="{{member.nominee_pan}}">
+                            </div>
+                            
+
+                            
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_phone_number">Phone Number </label>
+                                <input type="number" class="form-control w-50" name="nominee_phone_number" value="{{ member.nominee_phone_number}}">
+                            </div>
+
+                            <div class="mb-3 mt-3 inline">
+                                <label for="dob">DOB</label>
+                                <input type="date" class="form-control w-50" name="nominee_dob" value="{{ member.nominee_dob|date:'Y-m-d' }}">
+                            </div>
+                            <div class="mb-3 mt-3 inline">
+                                <label for="nominee_adhaar">Adhaar Number</label>
+                                <input type="text" class="form-control w-50" name="nominee_adhaar" value="{{member.nominee_adhaar}}">
+                            </div>
+
+                            
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5 mb-3">
+                        <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
+                            style="width:15%">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        
+
+        
+
+        
+    </div>
+
+
+   
+   
+</body>
+
+</html>
+
+{% endblock content %}

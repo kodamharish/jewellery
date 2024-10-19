@@ -257,7 +257,7 @@ body {
 
 /* Side Menu bar CSS */
 .sidebar {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 70px;
   height: calc(100% - 70px);

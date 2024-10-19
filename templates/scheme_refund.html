@@ -14,7 +14,6 @@
             font-family: 'Arial', sans-serif;
         }
 
-
         .search-bar {
             
             justify-content: center;
@@ -46,10 +45,6 @@
 
 
         }
-
-
-        
-        
 
         .receipt-header {
             border-bottom: 2px solid #0077ff;
@@ -129,7 +124,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <!-- Search Form -->
-                <form method="GET" action="/recepit">
+                <form method="GET" action="/scheme_refund">
                     <!-- <div class="form-group mb-3">
                         <input type="text" name="search" id="searchInput" class="form-control w-50"
                             placeholder="Search Member by Phone Number" value="{{ request.GET.search }}">
@@ -172,7 +167,7 @@
                                 <th>Maturity Date</th>
                                 <th>Phone Number</th>
                                 <th>Email</th>
-                                <th>Pay Installment Amount</th>
+                                <th>View Transactions</th>
                                 
                                 
         
@@ -192,7 +187,7 @@
                                 <td>{{m.end_date}}</td>
                                 <td>{{m.phone_number}}</td>
                                 <td>{{m.email}}</td>
-                                <td><a href="{% url 'recepit_form' m.id  %}">Click Here</a></td>
+                                <td><a href="{% url 'transactions' m.id m.scheme.scheme_name  %}">Click Here</a></td>
 
 
                                 
@@ -205,6 +200,50 @@
                 </div>
             </div>
         </div>
+
+        {% endif %}
+
+
+        {% if transactions %}
+
+
+        <!-- <div class="row mt-5 mb-5">
+            <div class="col-md-12">
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered custom-table">
+                        <thead>
+                            <tr>
+                                
+                                
+
+                                <th>Member Name</th>
+                                <th>Scheme Name</th>
+                                <th>Receipt Date</th>
+                                <th>Receipt Amount</th>
+                                <th>Payment Mode</th>
+                                <th>Entered By</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            {% for t in transactions  %}
+                            <tr> 
+                                 <td>{{t.member.name}}</td>
+                                 <td>{{t.scheme_name}}</td>
+                                 <td>{{t.receipt_date}}</td>
+                                 <td>{{t.receipt_amount}}</td>
+                                 <td>{{t.payment_mode}}</td>
+                                 <td>{{t.ent_by}}</td>
+                                <td><a href="{% url 'scheme_refund_form' t.member.id  %}">Click here for Refund</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> -->
 
         {% endif %}
     </div>

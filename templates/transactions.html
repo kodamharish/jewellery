@@ -1,0 +1,66 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+    .custom-table {
+        font-size: 14px;
+    }
+
+    .custom-table th {
+        background-color: #008cff;
+        color: #ffffff;
+    }
+</style>
+<div class="container mt-5 mb-5">
+    {% if transactions_by_member %}
+    <div class="row mt-5 mb-5">
+        <div class="col-md-12">
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered custom-table">
+                    <thead>
+                        <tr>
+                            <th>Member Name</th>
+                            <th>Scheme Name</th>
+                            <th>Receipt Date</th>
+                            <th>Receipt Amount</th>
+                            <th>Payment Mode</th>
+                            <th>Entered By</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member, transactions in transactions_by_member %}
+                            <tr>
+                                <td rowspan="{{ transactions|length }}">{{ member.name }}</td>
+                                <td rowspan="{{ transactions|length }}">{{ transactions.0.scheme_name }}</td>
+                                <td>{{ transactions.0.receipt_date }}</td>
+                                <td>{{ transactions.0.receipt_amount }}</td>
+                                <td>{{ transactions.0.payment_mode }}</td>
+                                <td>{{ transactions.0.ent_by }}</td>
+                                <td rowspan="{{ transactions|length }}">
+                                    <a href="{% url 'scheme_refund_form' member.id %}">Click here for Refund</a>
+                                </td>
+                            </tr>
+                            {% for transaction in transactions|slice:"1:" %}
+                                <tr>
+                                    
+                                    <td>{{ transaction.receipt_date }}</td>
+                                    <td>{{ transaction.receipt_amount }}</td>
+                                    <td>{{ transaction.payment_mode }}</td>
+                                    <td>{{ transaction.ent_by }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -27,8 +27,8 @@ urlpatterns = [
 
     path('add_nominee',add_nominee,name="add_nominee"),
     path('tag',tag,name="tag"),
-    path('barcode/<str:member_id>/', generate_member_barcode, name='generate_member_barcode'),
-    path('member/<str:member_id>/', member_detail_with_barcode, name='member_detail_with_barcode'),
+    
+    
     path('member/<str:member_id>/qrcode', generate_member_qrcode, name='generate_member_qrcode'),
 
     

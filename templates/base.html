@@ -102,39 +102,7 @@
         </div>
     </div>
 
-    <!-- <div class="notification-sidebar" id="notificationSidebar">
-        <div class="notification-header">
-            <span class="close-sidebar" onclick="closeSidebar('notificationSidebar')">&times;</span>
-            <h5><strong>Notifications</strong></h5>
-        </div>
-        <div class="notification-body">
-           
-        </div>
-        <div class="notification-footer">
-            <div class="view-all">
-                <a href="#" class="view-all-link ">
-                    View All<i class="fas fa-arrow-circle-right ms-2"></i>
-                </a>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- <div class="inbox-sidebar" id="inboxSidebar">
-        <span class="close-sidebar" onclick="closeSidebar('inboxSidebar')">&times;</span>
-        <div class="inbox-header">
-            <h5><strong>Inbox</strong></h5>
-        </div>
-        <div class="inbox-body">
-            
-        </div>
-        <div class="inbox-footer">
-            <div class="view-all">
-                <a href="#" class="view-all-link ">
-                    View All<i class="fas fa-arrow-circle-right ms-2"></i>
-                </a>
-            </div>
-        </div>
-    </div> -->
+   
 
     <!-- Side Menu Bar -->
     <div class="sidebar">
@@ -142,52 +110,15 @@
 
         <ul class="menu">
             <li><a href="{% url 'dashboard' %}" class="menu-item"><i class="fas fa-tachometer-alt"></i><span class="menu-text">Dashboard</span></a></li>
-            <!-- <li>
-                <a href="#" class="menu-item"><i class="fas fa-building"></i><span class="menu-text">Department</span></a>
-                <ul class="submenu">
-                    <li><a href="#" class="submenu-item"><i class="fas fa-cogs"></i><span class="menu-text">Department</span></a>
-                    </li>
-                    <li><a href="#" class="submenu-item"><i class="fas fa-users"></i><span class="menu-text">Employee</span></a>
-                    </li>
-                </ul>
-            </li> -->
-            <!-- <li>
-                <a href="#" class="menu-item"><i class="fas fa-box-open"></i><span class="menu-text">Inventory</span></a>
-                <ul class="submenu">
-                    <li><a href="#" class="submenu-item"><i class="fas fa-industry"></i><span class="menu-text">Manufacturers</span></a>
-                    </li>
-                    <li><a href="#" class="submenu-item"><i class="fas fa-list"></i><span class="menu-text">Categories</span></a>
-                    </li>
-                    <li><a href="#" class="submenu-item"><i class="fas fa-tag"></i><span class="menu-text">Brands</span></a>
-                    </li>
-                    <li><a href="#" class="submenu-item"><i class="fas fa-cubes"></i><span class="menu-text">Manage
-                                Items</span></a></li>
-                    <li><a href="#" class="submenu-item"><i class="fas fa-clipboard-list"></i><span class="menu-text">Stock
-                                Control</span></a></li>
-                </ul>
-            </li> -->
+            <li><a href="{% url 'add_member' %}" class="menu-item"><i class="fas fa-plus"></i><span class="menu-text">Add Member</span></a></li>
             <li><a href="{% url 'member_details'%}" class="menu-item"><i class="fas fa-users"></i><span class="menu-text">Member Details</span></a></li>
 
-            <!-- <li>
-                <a href="#" class="menu-item"><i class="fas fa-shopping-cart"></i><span class="menu-text">Orders</span></a>
-                <ul class="submenu">
-                    <li><a href="#" class="submenu-item"><i class="fas fa-edit"></i><span class="menu-text">Place Orders</span></a></li>
-                    <li><a href="#" class="submenu-item"><i class="fas fa-history"></i><span class="menu-text">Order
-                                History</span></a></li>
-                </ul>
-            </li> -->
-            <!-- <li>
-                <a href="#" class="menu-item"><i class="fas fa-file-invoice"></i><span class="menu-text">Invoice</span></a>
-                <ul class="submenu">
-                    <li><a href="#" class="submenu-item"><i class="fas fa-file-alt"></i><span class="menu-text">Manage Invoice</span></a></li>
-                </ul>
-            </li> -->
+            
             
             <li><a href="{% url 'recepit' %}" class="menu-item"><i class="fas fa-file"></i><span class="menu-text">Receipt</span></a></li>
             <li><a href="{% url 'installment_remainder' %}" class="menu-item"><i class="fas fa-dollar-sign"></i><span class="menu-text">Installment Remainder</span></a></li>
             <li><a href="{% url 'scheme_refund' %}" class="menu-item"><i class="fas fa-dollar-sign"></i><span class="menu-text">Scheme Refund</span></a></li>
 
-            <li><a href="{% url 'add_member' %}" class="menu-item"><i class="fas fa-plus"></i><span class="menu-text">Add Member</span></a></li>
             <li><a href="{% url 'logout' %}" class="menu-item"><i class="fas fa-arrow-right"></i><span class="menu-text">Logout</span></a></li>
 
 

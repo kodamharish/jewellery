@@ -262,7 +262,7 @@
             <div class="col-md-12">
                 <form method="GET" action="/member_details">
                 <div class="search-bar">
-                    <input type="text" placeholder="Search for members..." name="search" id="searchInput" value="{{ request.GET.search }}">
+                    <input type="text" placeholder="Phone Number" name="search" id="searchInput" value="{{ request.GET.search }}">
 
                     <button class="btn btn-primary" type="submit" >Search</button>
                 </div>
@@ -270,14 +270,14 @@
         
                 <div class="filters">
                     <form method="get">
-                        <div class="filter-group">
+                        <!-- <div class="filter-group">
                             <label for="status">Status:</label>
                             <select id="status" name="status">
                                 <option value="all">All</option>
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
-                        </div>
+                        </div> -->
                     </form>
                     <!-- <div class="filter-group">
                         <label for="gold-amount">Gold Amount:</label>
@@ -288,10 +288,10 @@
                             <option value="50+">50g+</option>
                         </select>
                     </div> -->
-                    <div class="filter-group">
+                    <!-- <div class="filter-group">
                         <label for="join-date">Join Date:</label>
                         <input type="date" id="join-date">
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -305,15 +305,20 @@
                 <p><strong>Join Date:</strong> {{ member.join_date|date:'d-m-Y' }}</p>
                 <!-- <p><strong>Last Payment:</strong> {{ member.last_payment|date:'Y-m-d' }}</p> -->
                 <p><strong>Referral Code </strong> {{ member.member_referral_code }}</p>
+                <p><strong>Referral Points</strong> {{ member.referral_points }}</p>
+
                 <p><strong>Status:</strong> {{ member.status|title }}</p>
 
                 <!-- Hide the barcode on the main page -->
                 <img id="barcode-{{ member.id }}" src="{% url 'generate_member_qrcode' member.id %}" alt="Member Barcode" class="barcode">
 
                 <div class="action-buttons">
-                    <button class="btn btn-primary">View Details</button>
+                    <!-- <button class="btn btn-primary">View Details</button> -->
                     <button class="btn btn-primary" onclick="printBarcode('{{ member.id }}')">Print</button>
                     <button class="btn btn-primary"><a href="{% url 'edit_member' member.id %}" style="color:white;text-decoration:none;">Edit</a></button>
+                    <button class="btn btn-primary"><a href="{% url 'delete_member' member.id %}" style="color:white;text-decoration:none;">Delete</a></button>
+                    
+
                 </div>
             </div>
             {% endfor %}

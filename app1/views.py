@@ -121,9 +121,17 @@ def dashboard(request):
         return redirect('login')
 
     members = Member.objects.all()
-    context = {'current_user': current_user, 'members': members}
+    for member in members:
+        # Get the latest transaction (i.e., last paid date) for the member
+        latest_transaction = Transaction.objects.filter(member=member).order_by('-receipt_date').first()
+        
+        last_paid_date = latest_transaction.receipt_date if latest_transaction else None
+    context = {'current_user': current_user, 'members': members,'last_paid_date':last_paid_date,'latest_transaction':latest_transaction}
 
     return render(request, 'dashboard.html', context)
+
+
+
 
 
 
@@ -285,7 +293,7 @@ def generate_referral_code(length=8):
 
 
 
-def add_member(request):
+def add_member1(request):
     maturity_period_choices = Scheme.MATURITY_PERIOD_CHOICES
     benefit_choices = Scheme.BENEFIT_CHOICES
 
@@ -315,6 +323,9 @@ def add_member(request):
         scheme_maturity_period = int(scheme.scheme_maturity_period)
         join_date_obj = datetime.strptime(join_date, '%Y-%m-%d')
         end_date = join_date_obj + relativedelta(months=scheme_maturity_period)
+
+        referring_member = Member.objects.get(member_referral_code=referred_person_referral_code)
+        referring_member.add_referral_points(10)  # Add 10 points for successful referral
 
         # Proceed with member creation
         member = Member(
@@ -354,6 +365,95 @@ def add_member(request):
         }
 
         return render(request, 'member_regform.html', context)
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.utils import timezone
+from .models import Member, Scheme, User
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+def add_member(request):
+    maturity_period_choices = Scheme.MATURITY_PERIOD_CHOICES
+    benefit_choices = Scheme.BENEFIT_CHOICES
+
+    if request.method == 'POST':
+        # Extract form data
+        member_name = request.POST.get('member_name')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        phone_number = request.POST.get('phone_number')
+        aadhaar = request.POST.get('aadhaar')
+        pan = request.POST.get('pan')
+        pin = request.POST.get('pin')
+        scheme_name = request.POST.get('scheme_name')
+        referred_person_name = request.POST.get('referred_person_name')
+        referred_person_id = request.POST.get('referred_person_id')
+        email = request.POST.get('email')
+        join_date = request.POST.get('join_date')  # Should be in 'YYYY-MM-DD' format
+        referred_person_referral_code = request.POST.get('referred_person_referral_code')
+
+        current_user = request.session['current_user']
+        user = User.objects.get(username=current_user)
+        scheme = Scheme.objects.get(scheme_name=scheme_name)
+
+        # Calculate the end_date based on the scheme_maturity_period
+        scheme_maturity_period = int(scheme.scheme_maturity_period)
+        join_date_obj = datetime.strptime(join_date, '%Y-%m-%d')
+        end_date = join_date_obj + relativedelta(months=scheme_maturity_period)
+
+        # Check if a referral code is provided and handle referral points
+        if referred_person_referral_code:
+            try:
+                referring_member = Member.objects.get(member_referral_code=referred_person_referral_code)
+                # Add 10 points to the referring member for successful referral
+                referring_member.add_referral_points(10)
+                referring_member.save()
+            except Member.DoesNotExist:
+                messages.error(request, 'Invalid referral code. No referral points added.')
+
+        # Proceed with member creation
+        member = Member(
+            created_by=user,
+            name=member_name,
+            address=address,
+            city=city,
+            pin=pin,
+            phone_number=phone_number,
+            aadhaar=aadhaar,
+            pan=pan,
+            email=email,
+            status='active',
+            referred_person_name=referred_person_name,
+            referred_person_id=referred_person_id,
+            referred_person_referral_code=referred_person_referral_code,
+            scheme=scheme,
+            join_date=join_date,
+            end_date=end_date.date()  # Save only the date part
+        )
+        member.save()
+        messages.success(request, 'Member Created Successfully')
+        return redirect('add_member')
+
+    else:
+        current_user = request.session['current_user']
+        schemes = Scheme.objects.all()
+        current_date = datetime.now().date()
+
+        context = {
+            'current_user': current_user,
+            'schemes': schemes,
+            'maturity_period_choices': maturity_period_choices,
+            'benefit_choices': benefit_choices,
+            'current_date': current_date,  # Pass the current date
+        }
+
+        return render(request, 'member_regform.html', context)
+
+
 
 
 def edit_member(request,id):
@@ -430,6 +530,12 @@ def edit_member(request,id):
         return render(request, 'member_edit_form.html', context)
 
 
+
+def delete_member(request,id):
+    member = Member.objects.get(id=id)
+    member.delete()
+    messages.success(request,'member deleted succesfully')
+    return redirect('member_details')
 
 def add_nominee(request):
     if request.method == 'POST':
@@ -533,6 +639,8 @@ def scheme_refund(request):
         if not member.exists():
             messages.error(request, 'No member found with that number or phone.')
             member = None
+            return redirect('scheme_refund')
+
 
     if request.method == 'POST':
         pass
@@ -570,6 +678,7 @@ def transactions(request, id, scheme_name):
     if not transactions.exists():
         messages.error(request, 'No transaction found for that member phone number.')
         transactions = None
+        return redirect('scheme_refund')
 
     # Group transactions by member
     transactions_by_member = defaultdict(list)

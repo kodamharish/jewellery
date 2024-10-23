@@ -129,64 +129,7 @@ table.dataTable {
 <body>
 
 <div class="container mt">
-    <!-- <h6>Installment Reminder - SMS</h6> -->
     
-    <!-- First Row (DueDays and Prom By section with two search bars) -->
-    <!-- <div class="header-inputs">
-        <h6 style="font-size: 15px;">Groups:</h6>
-        <div class="input-group">
-            <span class="input-group-text">DueDays =</span>
-            <input type="number" class="form-control">
-        </div>
-        <div class="input-group">
-            <span class="input-group-text">DueDays ></span>
-            <input type="number" class="form-control">
-        </div>
-        <div class="input-group">
-            <span class="input-group-text">DueDays <</span>
-            <input type="number" class="form-control">
-        </div>
-        <div class="input-group">
-            <span class="input-group-text">Prom By:</span>
-            <input type="text" class="form-control search-input" placeholder="Search...">
-            <input type="text" class="form-control search-input" placeholder="Search...">
-        </div>
-        <button class="btn btn-danger"><img src="https://img.icons8.com/windows/20/000000/delete-sign.png" alt="Delete"/></button>
-    </div> -->
-
-    <!-- Second Row (SMS, Excel buttons, and radio filters) -->
-    <!-- <div class="header-inputs">
-        <button class="btn btn-light btn-sms">SMS</button>
-        <button class="btn btn-light btn-excel">
-            <img src="https://img.icons8.com/excel/20/000000/microsoft-excel-2019.png" alt="Excel"/>
-        </button>
-
-        <div class="input-group">
-            <input type="text" class="form-control search-input">
-        </div>
-
-        <div class="radio-options">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="radioGroup" id="groupPayDay">
-                <label class="form-check-label" for="groupPayDay">Group Pay Day</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="radioGroup" id="createdDt">
-                <label class="form-check-label" for="createdDt">Created Dt</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="radioGroup" id="lastPaidDt">
-                <label class="form-check-label" for="lastPaidDt">LastPaidDt</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="radioGroup" id="notPaidByMonth">
-                <label class="form-check-label" for="notPaidByMonth">NotPaidBy Month</label>
-            </div>
-        </div>
-
-        <button class="btn btn-primary">Generate</button>
-    </div> -->
-
     <!-- Responsive Table -->
     <div >
         <table id="studentTable" class="table table-bordered">
@@ -198,8 +141,11 @@ table.dataTable {
                     <th>Mobile</th>
                     <!-- <th>GrpPDay</th>
                     <th>CreatedDt</th> -->
-                    <th>LastPaidDt</th>
-                    <th>DueAmt</th>
+                    
+                    <th>Scheme Name</th>
+                    <th>Last Paid Date</th>
+                    <th>Receipt Amount</th>
+
                     <!-- <th>DueInstall</th>
                     <th>PaidInstall</th>
                     <th>PaidAmt</th>
@@ -214,8 +160,10 @@ table.dataTable {
                     <td>{{member.phone_number}}</td>
                     <!-- <td>1</td>
                     <td>30-08-2024</td> -->
-                    <td>04-09-2024</td>
-                    <td>0</td>
+                    <td>{{ latest_transaction.receipt_date|date:"d-m-Y" }}</td>
+                    <td>{{ latest_transaction.scheme_name }}</td>
+                    <td>{{ latest_transaction.receipt_amount }}</td>
+
                     <!-- <td>0</td>
                     <td>2</td>
                     <td>2000</td>

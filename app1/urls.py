@@ -18,6 +18,8 @@ urlpatterns = [
 
     path('add_member',add_member,name="add_member"),
     path('edit_member/<int:id>/',edit_member,name="edit_member"),
+    path('delete_member/<int:id>/',delete_member,name="delete_member"),
+
 
     path('add_scheme',add_scheme,name="add_scheme"),
     path('scheme_refund/',scheme_refund,name="scheme_refund"),

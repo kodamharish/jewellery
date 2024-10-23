@@ -143,7 +143,7 @@
 
                 <div class="form-group mb-3">
                     <label for="recepit_amount" class="form-label">Recepit Amount</label>
-                    <input type="text" class="form-control" id="recepit_amount" name="recepit_amount">
+                    <input type="text" class="form-control" id="recepit_amount" name="recepit_amount" value="{% if member %}{{ member.scheme.scheme_installment_amount }} {% endif %}">
                 </div>
 
                 <div class="form-group mb-3">

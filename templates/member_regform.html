@@ -89,7 +89,7 @@
 
                             <div class="mb-3 mt-3 inline">
                                 <label for="member_name">Member Name</label>
-                                <input type="text" class="form-control w-50" name="member_name">
+                                <input type="text" class="form-control w-50" name="member_name"   pattern="[A-Za-z\s]+" title="Please enter only letters"  required>
                             </div>
 
                     
@@ -121,19 +121,20 @@
                                 <input type="email" class="form-control w-50" name="email">
                             </div>
                             <div class="mb-3 mt-3 inline">
-                                <label for="phone_number">Phone Number </label>
-                                <input type="number" class="form-control w-50" name="phone_number">
+                                <label for="phone_number">Phone Number</label>
+                                <input type="text" class="form-control w-50" name="phone_number" 
+                                       pattern="\d{10}" 
+                                       title="Please enter exactly 10 digits" 
+                                    >
                             </div>
-                            <!-- <div class="mb-3 mt-3 inline">
-                                <label for="phone_number2">Phone Number 2</label>
-                                <input type="number" class="form-control w-50" name="phone_number2">
-                            </div> -->
+                            
 
 
 
                             <div class="mb-3 inline">
                                 <label for="referred_person_name">Referral Member Name</label>
-                                <input type="text" class="form-control w-50" name="referred_person_name">
+                                <input type="text" class="form-control w-50" name="referred_person_name" pattern="[A-Za-z\s]+" 
+                                title="Please enter only letters" >
                             </div>
 
                             <div class="mb-3 inline">
@@ -141,24 +142,22 @@
                                 <input type="text" class="form-control w-50" name="referred_person_referral_code">
                             </div>
 
-                            <!-- <div class="mb-3 inline">
-                                <label for="wtc">Wt Conversion</label>
-                                <input type="text" class="form-control w-50" name="wtc">
-                            </div> -->
-
-
+                            
                         </div>
                         <div class="col-md-6">
-
-                            
-
                             <div class="mb-3 mt-3 inline">
                                 <label for="aadhaar">Aadhaar</label>
-                                <input type="text" class="form-control w-50" name="aadhaar">
+                                <input type="text" class="form-control w-50"  id="aadhaar" name="aadhaar" pattern="\d{12}" 
+                                title="Please enter a valid 12-digit Aadhaar card number" 
+                                maxlength="12" minlength="12">
                             </div>
+
+                           
                             <div class="mb-3 mt-3 inline">
                                 <label for="pan">PAN</label>
-                                <input type="text" class="form-control w-50" name="pan">
+                                <input type="text" class="form-control w-50" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
+                                title="Please enter a valid 10-character PAN number in the format ABCDE1234F" 
+                                maxlength="10" minlength="10">
                             </div>
                             <div class="mb-3 mt-3 inline">
                                 <label for="address">Address </label>
@@ -167,26 +166,16 @@
                             </div>
                             <div class="mb-3 inline">
                                 <label for="city">City</label>
-                                <input type="text" class="form-control w-50" name="city">
+                                <input type="text" class="form-control w-50" name="city" pattern="[A-Za-z\s]+" 
+                                title="Please enter only letters" >
                             </div>
 
                             <div class="mb-3 inline">
                                 <label for="pin">PIN</label>
-                                <input type="number" class="form-control w-50" name="pin">
-                            </div>
-
-
-
-                            <!-- <div class="mb-3 inline">
-                                <label for="referred_person_id">Referred Person ID</label>
-                                <input type="text" class="form-control w-50" name="referred_person_id">
-                            </div> -->
-
-
-                            <!-- <div class="mb-3 inline">
-                                <label for="metal">Metal</label>
-                                <input type="text" class="form-control w-50" name="metal">
-                            </div> -->
+                                <input type="text" class="form-control w-50" name="pin" pattern="\d{6}" 
+                                title="Please enter a valid 6-digit PIN code" 
+                                maxlength="6" minlength="6" >
+                            </div> 
 
                         </div>
                     </div>
@@ -209,7 +198,8 @@
                         <div class="col-md-6">
                             <div class="mb-3 mt-3 inline">
                                 <label for="nominee_name"> Name</label>
-                                <input type="text" class="form-control w-50" name="nominee_name">
+                                <input type="text" class="form-control w-50" name="nominee_name" pattern="[A-Za-z\s]+" 
+                                title="Please enter only letters">
                             </div>
 
                             <div class="mb-3 mt-3 inline">
@@ -220,7 +210,9 @@
 
                             <div class="mb-3 mt-3 inline">
                                 <label for="nominee_adhaar">Adhaar Number</label>
-                                <input type="text" class="form-control w-50" name="nominee_adhaar">
+                                <input type="text" class="form-control w-50" name="nominee_adhaar"  pattern="\d{12}" 
+                                title="Please enter a valid 12-digit Aadhaar card number" 
+                                maxlength="12">
                             </div>
 
                         </div>
@@ -228,7 +220,8 @@
 
                             <div class="mb-3 mt-3 inline">
                                 <label for="nominee_phone_number">Phone Number </label>
-                                <input type="number" class="form-control w-50" name="nominee_phone_number">
+                                <input type="text" class="form-control w-50" name="nominee_phone_number" pattern="\d{10}" 
+                                title="Please enter exactly 10 digits" >
                             </div>
 
                             <div class="mb-3 mt-3 inline">
@@ -238,33 +231,12 @@
 
                             <div class="mb-3 mt-3 inline">
                                 <label for="nominee_pan">PAN Number</label>
-                                <input type="text" class="form-control w-50" name="nominee_pan">
+                                <input type="text" class="form-control w-50" name="nominee_pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
+                                title="Please enter a valid 10-character PAN number in the format ABCDE1234F" 
+                                maxlength="10" minlength="10">
                             </div>
 
-                            <!-- <div class="mb-3 mt-3 inline">
-                                <label for="pay">Pay Mode</label>
-                                <input type="text" class="form-control w-50" name="pay">
-                            </div> -->
-
-                            <!-- <div class="mb-3 mt-3 inline">
-                                <label for="route">Route</label>
-                                <input type="text" class="form-control w-50" name="route">
-                            </div> -->
-
-                            <!-- <div class="mb-3 mt-3 inline">
-                                <label for="payf">Pay Fallowup</label>
-                                <input type="number" class="form-control w-50" name="payf">
-                            </div> -->
-
-                            <!-- <div class="mb-3 mt-3 inline">
-                                <label for="status">Status</label>
-                                <input type="number" class="form-control w-50" name="status">
-                            </div> -->
-
-                            <!-- <div class="mb-3 mt-3 inline">
-                                <label for="exst_mem">Existing Member</label>
-                                <input type="number" class="form-control w-50" name="exst_mem">
-                            </div> -->
+                            
                         </div>
                     </div>
 
@@ -338,13 +310,6 @@
 
 
 
-
-
-
-    
-
-
-    
     
 </body>
 

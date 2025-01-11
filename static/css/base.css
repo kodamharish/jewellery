@@ -4,8 +4,15 @@ body {
   padding: 0;
 }
 
-.navbar {
+/* .navbar {
   background: linear-gradient(to bottom, #54528e, #c3c3c3);;
+  padding: 10px;
+  transition: all 0.3s ease;
+} */
+
+.navbar {
+  background-color: white;
+  box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
   padding: 10px;
   transition: all 0.3s ease;
 }
@@ -27,12 +34,12 @@ body {
   margin-right: 25px;
 }
 
-.navbar-brand:hover,
+/* .navbar-brand:hover,
 .navbar-nav .nav-link:hover {
   background-color: #4a47a0;
   color: #030303 !important;
   transition: all 0.3s ease;
-}
+} */
 
 .profile-sidebar,
 .notification-sidebar,
@@ -83,6 +90,8 @@ body {
   background-color: #4a47a0;
   transition: all 0.3s ease;
 }
+
+
 
 .nav-link img {
   margin-top: -0.2rem;
@@ -259,11 +268,12 @@ body {
 .sidebar {
   position: absolute;
   left: 0;
-  top: 70px;
+  //top: 70px;
   height: calc(100% - 70px);
   overflow-y: auto;
   width: 220px;
-  background: linear-gradient(to bottom, #54528e, #c3c3c3);
+  //background: linear-gradient(to bottom, #54528e, #c3c3c3);
+  background-color:#a36e29 !important;
   color: #101010 !important;
   transition: all 0.3s ease;
   z-index: 999;
@@ -323,10 +333,12 @@ body,
   margin-right: 10px;
 }
 
+
 .menu a:hover,
 .menu a:focus {
-  background-color: #88AB8E;
-  border-radius: 5px;
+  background-color: #ffffff;
+  
+  color:#000000;
 }
 
 .menu-tooltip {
@@ -489,3 +501,90 @@ body,
   font-size: 18px;
 }
 
+
+
+/* new */
+.sidebar {
+  width: 70px; /* Collapsed width */
+  position: fixed;
+  top: 72px;
+  left: 0;
+  height: 100%;
+  background-color: #343a40;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar:hover {
+  width: 250px; /* Expanded width */
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.menu-item i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.menu-item:hover {
+  background-color: #495057;
+}
+
+.menu-text {
+  display: none; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar:hover .menu-text {
+  display: inline; 
+  margin-left: 10px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+      width: 70px; 
+  }
+
+  .sidebar:hover {
+      width: 250px; 
+  }
+
+  .menu-text {
+      display: none; 
+  }
+
+  .sidebar:hover .menu-text {
+      display: inline; 
+      margin-left: 10px;
+  }
+}
+
+@media (min-width: 769px) {
+  .sidebar {
+      width: 250px; 
+  }
+
+  .sidebar:hover {
+      width: 250px; 
+  }
+
+  .menu-text {
+      display: inline; 
+  }
+}

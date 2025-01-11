@@ -121,9 +121,13 @@ table.dataTable {
     */
 
     .container{
-        margin-left: 216px; 
+        margin-left: 280px; 
+        width: 1000px;
 
     }
+
+    
+
     </style>
 </head>
 <body>
@@ -134,45 +138,42 @@ table.dataTable {
     <div >
         <table id="studentTable" class="table table-bordered">
             <thead class="mt-2">
+
                 <tr>
                     <th>Member ID</th>
-                    
-                    <th>Name</th>
-                    <th>Mobile</th>
-                    <!-- <th>GrpPDay</th>
-                    <th>CreatedDt</th> -->
-                    
+                    <th>Member Name</th>
                     <th>Scheme Name</th>
-                    <th>Last Paid Date</th>
+                    
+                    <th>Receipt Date</th>
                     <th>Receipt Amount</th>
-
-                    <!-- <th>DueInstall</th>
-                    <th>PaidInstall</th>
-                    <th>PaidAmt</th>
-                    <th>Prom By</th> -->
+                    <th>Paid Installments</th>
+                    <th>Due Installments</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                {% for member in members %}
+                {% for member_data in members_data %}
                 <tr>
-                    <td>{{member.id}}</td>
-                    <td>{{member.name}}</td>
-                    <td>{{member.phone_number}}</td>
-                    <!-- <td>1</td>
-                    <td>30-08-2024</td> -->
-                    <td>{{ latest_transaction.receipt_date|date:"d-m-Y" }}</td>
-                    <td>{{ latest_transaction.scheme_name }}</td>
-                    <td>{{ latest_transaction.receipt_amount }}</td>
+                    <td>{{ member_data.member.id }}</td>
+                    <td>{{ member_data.member.name }}</td>
+                    <td>{{ member_data.member.scheme.scheme_name }}</td>
 
-                    <!-- <td>0</td>
-                    <td>2</td>
-                    <td>2000</td>
-                    <td>Guest</td> -->
+                    
+                    <td>
+                        {% if member_data.receipt_date %}
+                            {{ member_data.receipt_date|date:"Y-m-d" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ member_data.receipt_amount }}
+                    </td>
+                    <td>{{ member_data.total_paid_installments }}</td>
+                    <td>{{ member_data.due_installments }}</td>
+                    
                 </tr>
             {% endfor %}
-
-                
-                <!-- Add more rows as needed -->
             </tbody>
         </table>
     </div>
@@ -188,6 +189,12 @@ table.dataTable {
   $(document).ready(function() {
     $('#studentTable').DataTable();
   });
+
+
+
+        
+        
+
 </script>
 
 {% endblock content %}

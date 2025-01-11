@@ -1,318 +1,357 @@
 {% extends './base.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <style>
-        .container {
-            margin-left: 250px;
+<style>
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
 
-        }
+    .form-label {
+        position: absolute;
+        top: 50%;
+        left: 25px;
+        transform: translateY(-50%);
+        background: #fff;
+        padding: 0 5px;
+        color: #aaa;
+        transition: 0.2s ease all;
+        pointer-events: none;
+    }
 
-        label {
-            width: 150px;
-        }
+    .form-control:focus,
+    .form-select:focus,
+    .form-control.filled,
+    .form-select.filled {
+        border-color: #a36e29;
+        box-shadow: none;
+    }
 
-        .inline {
-            display: flex;
-            margin: 25px;
-        }
+    .form-control:focus~.form-label,
+    .form-select:focus~.form-label,
+    .form-control:not(:placeholder-shown)~.form-label,
+    .form-select:not(:placeholder-shown)~.form-label {
+        top: 0;
+        transform: translateY(-60%);
+        left: 20px;
+        font-size: 14px;
+        color: #a36e29;
+    }
 
-        .border-radius {
-            border-radius: 8px;
-        }
+    .form-control.filled~.form-label,
+    .form-select.filled~.form-label,
+    .form-control:not(:placeholder-shown)~.form-label,
+    .form-select:not(:placeholder-shown)~.form-label {
+        color: black;
+    }
 
-        .select {
-            display: block;
-            width: 100%;
-            height: 34px;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #555;
-            background-color: #fff;
+    .form-control:focus~.form-label,
+    .form-select:focus~.form-label,
+    .form-control:focus.filled~.form-label,
+    .form-select:focus.filled~.form-label {
+        font-weight: bold;
+        color: #a36e29;
+    }
 
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    .form-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
 
-        }
-        .ml{
-            margin-left:10px;
-        }
-    </style>
-</head>
+    .form-select::-ms-expand {
+        display: none;
+    }
 
-<body>
 
-    <div class="container">
 
-        <ul class="nav nav-pills">
-            <li class="active"><a data-toggle="pill" href="#home">Member </a></li>
-            <li><a data-toggle="pill" href="#menu1">Nominee</a></li>
-            
-        </ul>
+    .add-purity {
+        position: absolute;
+        top: 0px;
+        right: 24px;
+    }
 
-        {% for msg in messages %}
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    
+    
+</style>
+
+<div class="container mt-5">
+
+    {% for msg in messages %}
         <p class="text-danger mt-2 fw-bold text-center">{{msg}}</p>
-        {% endfor %}
+    {% endfor %}
 
-        <div class="tab-content">
-            <div id="home" class="tab-pane fade in active">
+    <form method="post">
+        {% csrf_token %}
 
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="row mt-5 mb-5">
+    <div class="row mt-5 mb-3">
+        <h4 style="text-align:center;color:#a36e29;margin-bottom:28px;">Member</h4>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="date" class="form-control" id="join_date" name="join_date"
+                    value="{{ current_date|date:'Y-m-d' }}" placeholder="">
+                <label class="form-label" for="join_date">Date</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <select class="form-select w-75" id="scheme_name" name="scheme_name">
+                    <option value="" disabled selected hidden></option> <!-- Empty default option for label floating -->
+
+                    {% for scheme in schemes %}
+                    <option value="{{ scheme.scheme_name }}" data-scheme-id="{{ scheme.scheme_id }}">{{scheme.scheme_name }}</option>
+                    {% endfor %}
 
 
-                        <div class="col-md-6">
+                </select>
+                <label class="form-label" for="scheme_name">Scheme Name</label>
 
-                            <div class="mb-3 mt-3 inline">
-                                <label for="join_date" class="form-label">Date</label>
-                                <input type="date" class="form-control w-50" id="join_date" name="join_date" value="{{ current_date|date:'Y-m-d' }}">
-                            </div>
+                <button type="button" class="btn btn-primary add-purity" data-bs-toggle="modal" data-bs-target="#myModal">
+                    <i class="fas fa-plus"></i>
+                  </button>
+            </div>
+        </div>
+        <div class="col-md-4">
 
-                            <div class="mb-3 mt-3 inline">
-                                <label for="member_name">Member Name</label>
-                                <input type="text" class="form-control w-50" name="member_name"   pattern="[A-Za-z\s]+" title="Please enter only letters"  required>
-                            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="member_name" name="member_name" placeholder="">
+                <label class="form-label" for="member_name">Name</label>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <div class="row mb-3">
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="email" class="form-control" id="email" name="email" placeholder="">
+                <label class="form-label" for="email">Email</label>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="number" class="form-control" id="phone_number" name="phone_number" placeholder="">
+                <label class="form-label" for="phone_number">Phone Number</label>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="referred_person_name" name="referred_person_name"
+                    placeholder="">
+                <label class="form-label" for="referred_person_name">Referral Member Name</label>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="referred_person_referral_code"
+                    name="referred_person_referral_code" placeholder="">
+                <label class="form-label" for="referred_person_referral_code">Referred Member Referral Code</label>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row mb-3">
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="aadhaar" name="aadhaar" placeholder="">
+                <label class="form-label" for="aadhaar">Aadhaar</label>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="pan" name="pan" placeholder="">
+                <label class="form-label" for="pan">PAN</label>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="city" name="city" placeholder="">
+                <label class="form-label" for="city">City</label>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="pin" name="pin" placeholder="">
+                <label class="form-label" for="pin">Pin</label>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="row mb-3">
+        
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <textarea class="form-control" rows="4" id="address" name="address" placeholder="" required></textarea>
+
+                <label class="form-label" for="address">Address</label>
+
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <h4 style="text-align:center;color:#a36e29;margin-bottom:28px;">Nominee </h4>
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="nominee_name" name="nominee_name" placeholder="">
+                <label class="form-label" for="nominee_name">Name</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="email" class="form-control" id="nominee_email" name="nominee_email" placeholder="">
+                <label class="form-label" for="nominee_email">Email</label>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="nominee_phone_number" name="nominee_phone_number"
+                    placeholder="">
+                <label class="form-label" for="nominee_phone_number">Phone Number</label>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="nominee_pan" name="nominee_pan" placeholder="">
+                <label class="form-label" for="nominee_pan">Pan</label>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="text" class="form-control" id="nominee_adhaar" name="nominee_adhaar" placeholder="">
+                <label class="form-label" for="nominee_adhaar">Adhaar</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+    </form>
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title text-center">Add Scheme</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <form method="post" action="{% url 'add_scheme' %}">
+            {% csrf_token %}
+  
+        <!-- Modal body -->
+        <div class="modal-body text-center">
+            <div class="form-group">
+                <input type="text" class="form-control w-75" id="add_scheme_name" name="add_scheme_name" placeholder="">
+                <label class="form-label" for="add_scheme_name">Scheme Name</label>
+            </div>
+
+            <div class="form-group">
+                <select class="form-select w-75" id="add_scheme_maturity_period" name="add_scheme_maturity_period">
+                    <option value="" disabled selected hidden></option> <!-- Empty default option for label floating -->
+
+                    {% for value, display in maturity_period_choices %}
+                                <option value="{{ value }}">{{ display }}</option>
+                            {% endfor %}
+                </select>
+                <label class="form-label" for="add_scheme_maturity_period">Maturity Period(Months)</label>
+            </div>
+
+            <div class="form-group">
+                <select class="form-select w-75" id="add_scheme_benefit" name="add_scheme_benefit">
+                    <option value="" disabled selected hidden></option> <!-- Empty default option for label floating -->
 
                     
 
-                            <div class="mb-3 inline">
-                                <label for="scheme_name">Scheme Name</label>
-                                <!-- <select class="form-select select w-50" name="scheme_name" onchange="saveSchemeInSession()" id="scheme-dropdown">
-                                    <option value="">Select</option>
-                                    {% for scheme in schemes %}
-                                        <option value="{{ scheme.scheme_name }}">{{ scheme.scheme_name }}</option>
-                                    {% endfor %}
-                                </select> -->
-
-                                <select class="form-select select w-50" name="scheme_name" onchange="fetchSchemeDetails(this)" id="scheme-dropdown">
-                                    <option value="">Select</option>
-                                    {% for scheme in schemes %}
-                                        <option value="{{ scheme.scheme_name }}" data-scheme-id="{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</option>
-                                    {% endfor %}
-                                </select>
-                            
-                                <button type="button" class="btn btn-info ml" data-toggle="modal" data-target="#addScheme">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                            
-                        
-                            <div class="mb-3 mt-3 inline">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control w-50" name="email">
-                            </div>
-                            <div class="mb-3 mt-3 inline">
-                                <label for="phone_number">Phone Number</label>
-                                <input type="text" class="form-control w-50" name="phone_number" 
-                                       pattern="\d{10}" 
-                                       title="Please enter exactly 10 digits" 
-                                    >
-                            </div>
-                            
-
-
-
-                            <div class="mb-3 inline">
-                                <label for="referred_person_name">Referral Member Name</label>
-                                <input type="text" class="form-control w-50" name="referred_person_name" pattern="[A-Za-z\s]+" 
-                                title="Please enter only letters" >
-                            </div>
-
-                            <div class="mb-3 inline">
-                                <label for="referred_person_referral_code">Referred Member Referral Code</label>
-                                <input type="text" class="form-control w-50" name="referred_person_referral_code">
-                            </div>
-
-                            
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 mt-3 inline">
-                                <label for="aadhaar">Aadhaar</label>
-                                <input type="text" class="form-control w-50"  id="aadhaar" name="aadhaar" pattern="\d{12}" 
-                                title="Please enter a valid 12-digit Aadhaar card number" 
-                                maxlength="12" minlength="12">
-                            </div>
-
-                           
-                            <div class="mb-3 mt-3 inline">
-                                <label for="pan">PAN</label>
-                                <input type="text" class="form-control w-50" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
-                                title="Please enter a valid 10-character PAN number in the format ABCDE1234F" 
-                                maxlength="10" minlength="10">
-                            </div>
-                            <div class="mb-3 mt-3 inline">
-                                <label for="address">Address </label>
-
-                                <textarea class="form-control w-50" name="address"></textarea>
-                            </div>
-                            <div class="mb-3 inline">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control w-50" name="city" pattern="[A-Za-z\s]+" 
-                                title="Please enter only letters" >
-                            </div>
-
-                            <div class="mb-3 inline">
-                                <label for="pin">PIN</label>
-                                <input type="text" class="form-control w-50" name="pin" pattern="\d{6}" 
-                                title="Please enter a valid 6-digit PIN code" 
-                                maxlength="6" minlength="6" >
-                            </div> 
-
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-5 mb-3">
-                        <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
-                            style="width:15%">Submit</button>
-                    </div>
-                </form>
-
-
-            </div>
-            <div id="menu1" class="tab-pane fade">
-
-                <form method="post" action="{% url 'add_nominee' %}">
-                    {% csrf_token %}
-                    <div class="row mt-5 mb-5">
-
-
-                        <div class="col-md-6">
-                            <div class="mb-3 mt-3 inline">
-                                <label for="nominee_name"> Name</label>
-                                <input type="text" class="form-control w-50" name="nominee_name" pattern="[A-Za-z\s]+" 
-                                title="Please enter only letters">
-                            </div>
-
-                            <div class="mb-3 mt-3 inline">
-                                <label for="nominee_email">Email</label>
-                                <input type="email" class="form-control w-50" name="nominee_email">
-                            </div>
-                            
-
-                            <div class="mb-3 mt-3 inline">
-                                <label for="nominee_adhaar">Adhaar Number</label>
-                                <input type="text" class="form-control w-50" name="nominee_adhaar"  pattern="\d{12}" 
-                                title="Please enter a valid 12-digit Aadhaar card number" 
-                                maxlength="12">
-                            </div>
-
-                        </div>
-                        <div class="col-md-6">
-
-                            <div class="mb-3 mt-3 inline">
-                                <label for="nominee_phone_number">Phone Number </label>
-                                <input type="text" class="form-control w-50" name="nominee_phone_number" pattern="\d{10}" 
-                                title="Please enter exactly 10 digits" >
-                            </div>
-
-                            <div class="mb-3 mt-3 inline">
-                                <label for="nominee_dob">DOB</label>
-                                <input type="date" class="form-control w-50" name="nominee_dob">
-                            </div>
-
-                            <div class="mb-3 mt-3 inline">
-                                <label for="nominee_pan">PAN Number</label>
-                                <input type="text" class="form-control w-50" name="nominee_pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
-                                title="Please enter a valid 10-character PAN number in the format ABCDE1234F" 
-                                maxlength="10" minlength="10">
-                            </div>
-
-                            
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-5 mb-3">
-                        <button type="submit" class="btn btn-primary border-radius pl pr mb-3"
-                            style="width:15%">Submit</button>
-                    </div>
-                </form>
-            </div>
-           
-        </div>
-    </div>
-
-
-   
-    <!-- Scheme Modal -->
-<div class="modal fade" id="addScheme" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add Scheme</h4>
-            </div>
-            <form method="post" action="{% url 'add_scheme' %}">
-                {% csrf_token %}
-
-                <div class="modal-body">
-                    <div class="mb-3 mt-3 inline">
-                        <label for="add_scheme_name">Scheme Name</label>
-                        <input type="text" class="form-control w-50" name="add_scheme_name" required>
-                    </div>
-
-                    <div class="mb-3 mt-3 inline">
-                        <label for="add_scheme_maturity_period">Maturity Period(Months)</label>
-                        <select class="form-control w-50" name="add_scheme_maturity_period" required>
-                            <option value="">Select</option>
-                            {% for value, display in maturity_period_choices %}
+                    {% for value, display in benefit_choices %}
                                 <option value="{{ value }}">{{ display }}</option>
                             {% endfor %}
-                        </select>
-                    </div>
 
-                    <div class="mb-3 mt-3 inline">
-                        <label for="add_scheme_benefit">Benefit</label>
-                        <select class="form-control w-50" name="add_scheme_benefit" required>
-                            <option value="">Select Benefit</option>
-                            {% for value, display in benefit_choices %}
-                                <option value="{{ value }}">{{ display }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
 
-                    <div class="mb-3 mt-3 inline">
-                        <label for="add_scheme_installment_amount">Installment Amount</label>
-                        <input type="text" class="form-control w-50" name="add_scheme_installment_amount" required>
-                    </div>
+                </select>
+                <label class="form-label" for="add_scheme_benefit">Select Benefit</label>
+            </div>
 
-                    <div class="text-center mt-5 mb-3">
-                        <button type="submit" class="btn btn-primary border-radius pl pr mb-3" style="width:15%">Submit</button>
-                    </div>
-                </div>
-            </form>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <div class="form-group">
+                <input type="text" class="form-control w-75" id="add_scheme_installment_amount" name="add_scheme_installment_amount" placeholder="">
+                <label class="form-label" for="add_scheme_installment_amount">Installment Amount</label>
+            </div>
+
+            <div class="text-center mt-5 mb-3">
+                <button type="submit" class="btn btn-primary border-radius pl pr mb-3" style="width:15%">Submit</button>
             </div>
         </div>
+
+        </form>
+
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
     </div>
+  </div>
+
 </div>
-
-
-
-
-    
-</body>
-
-</html>
 
 {% endblock content %}

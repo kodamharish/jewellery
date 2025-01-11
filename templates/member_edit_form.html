@@ -55,6 +55,10 @@
         .ml{
             margin-left:10px;
         }
+
+        a:hover{
+            text-decoration:none !important;
+          }
     </style>
 </head>
 
@@ -110,22 +114,6 @@
                                 <label for="phone_number">Phone Number </label>
                                 <input type="number" class="form-control w-50" name="phone_number" value="{{ member.phone_number}}">
                             </div>
-                            
-
-
-
-                            <div class="mb-3 inline">
-                                <label for="referred_person_name">Referral Member Name</label>
-                                <input type="text" class="form-control w-50" name="referred_person_name" value="{{ member.referred_person_name}}">
-                            </div>
-
-                            <div class="mb-3 inline">
-                                <label for="referred_person_referral_code">Referred Member Referral Code</label>
-                                <input type="text" class="form-control w-50" name="referred_person_referral_code" value="{{ member.referred_person_referral_code}}">
-                            </div>
-
-                            
-
 
                         </div>
                         <div class="col-md-6">
@@ -180,10 +168,6 @@
                                 <label for="nominee_pan">PAN Number</label>
                                 <input type="text" class="form-control w-50" name="nominee_pan" value="{{member.nominee_pan}}">
                             </div>
-                            
-
-                            
-
                         </div>
                         <div class="col-md-6">
 
@@ -191,17 +175,10 @@
                                 <label for="nominee_phone_number">Phone Number </label>
                                 <input type="number" class="form-control w-50" name="nominee_phone_number" value="{{ member.nominee_phone_number}}">
                             </div>
-
-                            <div class="mb-3 mt-3 inline">
-                                <label for="dob">DOB</label>
-                                <input type="date" class="form-control w-50" name="nominee_dob" value="{{ member.nominee_dob|date:'Y-m-d' }}">
-                            </div>
                             <div class="mb-3 mt-3 inline">
                                 <label for="nominee_adhaar">Adhaar Number</label>
                                 <input type="text" class="form-control w-50" name="nominee_adhaar" value="{{member.nominee_adhaar}}">
-                            </div>
-
-                            
+                            </div> 
                         </div>
                     </div>
 
@@ -211,18 +188,8 @@
                     </div>
                 </form>
             </div>
-        </div>
-
-        
-
-        
-
-        
+        </div> 
     </div>
-
-
-   
-   
 </body>
 
 </html>

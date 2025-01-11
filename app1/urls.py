@@ -17,6 +17,8 @@ urlpatterns = [
 
 
     path('add_member',add_member,name="add_member"),
+    path('new',new,name="new"),
+
     path('edit_member/<int:id>/',edit_member,name="edit_member"),
     path('delete_member/<int:id>/',delete_member,name="delete_member"),
 
@@ -32,6 +34,13 @@ urlpatterns = [
     
     
     path('member/<str:member_id>/qrcode', generate_member_qrcode, name='generate_member_qrcode'),
+
+
+
+    #APIs
+    path('api/add_member/', AddMemberAPIView.as_view(), name='api_add_member'),
+    path('api/all-schemes/', SchemeListAPIView.as_view(), name='all_scheme_list'),
+    path('api/all-members/', MemberListAPIView.as_view(), name='all_members_list')
 
     
 

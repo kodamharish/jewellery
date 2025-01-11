@@ -68,7 +68,7 @@
         .member-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            /* gap: 30px; */
         }
         .member-card {
             background-color: var(--card-bg);
@@ -77,6 +77,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
+            margin:10px;
         }
         .member-card:hover {
             transform: translateY(-8px);
@@ -102,9 +103,14 @@
         }
         .action-buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             margin-top: 20px;
+            
         }
+        .action-buttons a{
+            color:#a36e29;
+        }
+        
         .btn {
             padding: 10px 20px;
             border-radius: 25px;
@@ -174,10 +180,12 @@
             
             // Extract member details
             var name = memberCard.querySelector('h2').innerText;
-            var group = memberCard.querySelector('p:nth-of-type(1)').innerText;
-            var scheme = memberCard.querySelector('p:nth-of-type(2)').innerText;
-            var joinDate = memberCard.querySelector('p:nth-of-type(3)').innerText;
-            var lastPayment = memberCard.querySelector('p:nth-of-type(4)').innerText;
+            var scheme = memberCard.querySelector('p:nth-of-type(1)').innerText;
+            var joinDate = memberCard.querySelector('p:nth-of-type(2)').innerText;
+            var referral_code = memberCard.querySelector('p:nth-of-type(3)').innerText;
+            var status = memberCard.querySelector('p:nth-of-type(4)').innerText;
+
+            
             
             var barcodeSrc = memberCard.querySelector('img').src;
 
@@ -228,10 +236,9 @@
                 <body>
                     <div class="id-card printable-id-card">
                         <h2>${name}</h2>
-                        <p><strong></strong> ${group}</p>
                         <p><strong></strong> ${scheme}</p>
                         <p><strong></strong> ${joinDate}</p>
-                        <p><strong></strong> ${lastPayment}</p>
+                        <p><strong></strong> ${referral_code}</p>
                         <p><strong></strong> ${status}</p>
                         <img src="${barcodeSrc}" alt="Member Barcode">
                     </div>
@@ -270,28 +277,7 @@
         
                 <div class="filters">
                     <form method="get">
-                        <!-- <div class="filter-group">
-                            <label for="status">Status:</label>
-                            <select id="status" name="status">
-                                <option value="all">All</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div> -->
                     </form>
-                    <!-- <div class="filter-group">
-                        <label for="gold-amount">Gold Amount:</label>
-                        <select id="gold-amount">
-                            <option value="all">All</option>
-                            <option value="0-10">0-10g</option>
-                            <option value="10-50">10-50g</option>
-                            <option value="50+">50g+</option>
-                        </select>
-                    </div> -->
-                    <!-- <div class="filter-group">
-                        <label for="join-date">Join Date:</label>
-                        <input type="date" id="join-date">
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -305,7 +291,7 @@
                 <p><strong>Join Date:</strong> {{ member.join_date|date:'d-m-Y' }}</p>
                 <!-- <p><strong>Last Payment:</strong> {{ member.last_payment|date:'Y-m-d' }}</p> -->
                 <p><strong>Referral Code </strong> {{ member.member_referral_code }}</p>
-                <p><strong>Referral Points</strong> {{ member.referral_points }}</p>
+                
 
                 <p><strong>Status:</strong> {{ member.status|title }}</p>
 
@@ -313,11 +299,9 @@
                 <img id="barcode-{{ member.id }}" src="{% url 'generate_member_qrcode' member.id %}" alt="Member Barcode" class="barcode">
 
                 <div class="action-buttons">
-                    <!-- <button class="btn btn-primary">View Details</button> -->
-                    <button class="btn btn-primary" onclick="printBarcode('{{ member.id }}')">Print</button>
-                    <button class="btn btn-primary"><a href="{% url 'edit_member' member.id %}" style="color:white;text-decoration:none;">Edit</a></button>
-                    <button class="btn btn-primary"><a href="{% url 'delete_member' member.id %}" style="color:white;text-decoration:none;">Delete</a></button>
-                    
+                    <a href=""><i class="fas fa-print" onclick="printBarcode('{{ member.id }}')"></i></a>
+                    <a href="{% url 'edit_member' member.id %}" ><i class="fas fa-pencil"></i></a>
+                    <a href="{% url 'delete_member' member.id %}"><i class="fas fa-trash"></i></a>
 
                 </div>
             </div>

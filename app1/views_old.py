@@ -25,6 +25,58 @@ current_date = date.today()
 
 
 # Create your views here.
+def login1(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        #print(username,'username')
+        user = User.objects.get(username=username)
+
+        if user:
+            # Check if the password is correct
+            if check_password(password, user.password):
+                print(user.username)
+                request.session['current_user'] = user.username  # Save QC in session
+
+            
+                return redirect('dashboard')  # Redirect to a dashboard or home page
+            else:
+                messages.error(request,'Invalid username or password')
+                return redirect('login')  # Redirect to a dashboard or home page
+        else:
+            messages.error(request,'Invalid username')
+            
+    else:
+        return render(request,'login.html')
+    
+
+
+
+def login_old(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+            
+            # Check if the password is correct
+            if check_password(password, user.password):
+                print(user.username)
+                request.session['current_user'] = user.username  # Save user in session
+                return redirect('dashboard')  # Redirect to the dashboard or home page
+            else:
+                messages.error(request, 'Invalid username or password')
+                return redirect('login')
+
+        except User.DoesNotExist:
+            messages.error(request, 'Invalid username')
+            return redirect('login')
+        
+    else:
+        return render(request,'login.html')
+
+
 
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
@@ -60,9 +112,194 @@ def login(request):
 
 
 
+def dashboard1(request):
+    # Safely get 'current_user' from the session
+    current_user = request.session.get('current_user')
+
+    if not current_user:
+        # If there's no current user, redirect to the login page
+        return redirect('login')
+
+    members = Member.objects.all()
+    
+    context = {'current_user': current_user, 'members': members}
+
+    return render(request, 'dashboard.html', context)
 
 
 
+def dashboard2(request):
+    # Safely get 'current_user' from the session
+    current_user = request.session.get('current_user')
+
+    if not current_user:
+        # If there's no current user, redirect to the login page
+        return redirect('login')
+
+    members = Member.objects.all()
+    member_transactions = []
+
+    for member in members:
+        # Get the latest transaction (i.e., last paid date) for the member
+        latest_transaction = Transaction.objects.filter(member=member).order_by('-receipt_date').first()
+        last_paid_date = latest_transaction.receipt_date if latest_transaction else None
+
+        # Append member and their latest transaction to the list
+        member_transactions.append({
+            'member': member,
+            'latest_transaction': latest_transaction,
+            'last_paid_date': last_paid_date,
+        })
+
+    context = {
+        'current_user': current_user,
+        'member': member_transactions,
+    }
+
+    return render(request, 'dashboard.html', context)
+
+
+
+
+from django.db.models import Max, F
+from datetime import date
+
+def dashboard3(request):
+    # Safely get 'current_user' from the session
+    current_user = request.session.get('current_user')
+
+    if not current_user:
+        # If there's no current user, redirect to the login page
+        return redirect('login')
+
+    members = Member.objects.all()
+
+    member_data = []
+    for member in members:
+        # Get the latest transaction (i.e., last paid date) for the member
+        latest_transaction = Transaction.objects.filter(member=member).order_by('-receipt_date').first()
+        
+        last_paid_date = latest_transaction.receipt_date if latest_transaction else None
+        due_amt = 0
+
+        if last_paid_date:
+            # Calculate how many months are left until the scheme's maturity period
+            maturity_period = int(member.scheme.scheme_maturity_period)
+            months_paid = (last_paid_date.year - member.join_date.year) * 12 + last_paid_date.month - member.join_date.month
+            months_due = maturity_period - months_paid
+
+            # Calculate the due amount if months_due is positive
+            if months_due > 0:
+                due_amt = months_due * int(member.scheme.scheme_installment_amount)
+        
+        member_data.append({
+            'id': member.id,
+            'name': member.name,
+            'phone_number': member.phone_number,
+            'last_paid_date': last_paid_date,
+            'due_amt': due_amt,
+            'scheme_name':member.scheme.scheme_name,
+            'latest_transaction':latest_transaction
+            
+            
+        })
+
+    context = {
+        'current_user': current_user,
+        'members': member_data
+    }
+
+    return render(request, 'dashboard.html', context)
+
+
+
+
+
+
+from django.shortcuts import render, redirect
+from datetime import date, timedelta
+from decimal import Decimal
+from django.db.models import Sum
+from .models import Member, Transaction
+
+def calculate_total_amount1(member):
+    """Calculate the total amount paid by the member."""
+    return Decimal(Transaction.objects.filter(member=member).aggregate(total=Sum('receipt_amount'))['total'] or 0)
+
+
+def calculate_paid_installments1(member):
+    """Calculate the total number of installments paid by the member."""
+    total_paid_amount = calculate_total_amount(member)
+    installment_amount = Decimal(member.scheme.scheme_installment_amount)  # Ensure this is a Decimal
+    if installment_amount > 0:
+        return total_paid_amount // installment_amount
+    return 0
+
+
+def calculate_due_installments1(member):
+    """Calculate the number of due installments."""
+    total_installments = int(member.scheme.scheme_maturity_period)  # Total installments based on scheme
+    paid_installments_count = calculate_paid_installments(member)
+    return total_installments - paid_installments_count
+
+
+def is_payment_due_this_month1(member):
+    """Check if payment is due for the current month."""
+    today = date.today()
+
+    # Check if the member has paid for this month
+    current_month = today.month
+    current_year = today.year
+
+    # Find if there's a transaction for this month and year
+    payment_this_month = Transaction.objects.filter(
+        member=member, 
+        installment_month=current_month, 
+        installment_year=current_year
+    ).exists()
+
+    if not payment_this_month:
+        return True  # Payment is due if no transaction exists for this month
+
+    return False
+
+
+def dashboard4(request):
+    current_user = request.session.get('current_user')
+    if not current_user:
+        return redirect('login')
+
+    members = Member.objects.all()
+
+    # Initialize an empty list to store members and their calculated values
+    members_data = []
+
+    for member in members:
+        try:
+            total_paid_installments = calculate_paid_installments(member)
+            due_installments = calculate_due_installments(member)
+            is_payment_due_val = is_payment_due_this_month(member)  # Updated to check payment for the current month
+        except Exception as e:
+            # Handle any potential issues (e.g., missing data)
+            total_paid_installments = 0
+            due_installments = 0
+            is_payment_due_val = False
+
+        # Add all values to the members_data list
+        members_data.append({
+            'member': member,
+            'total_paid_installments': total_paid_installments,
+            'due_installments': due_installments,
+            'is_payment_due': is_payment_due_val,
+        })
+    print(members_data,'members_data')
+
+    context = {
+        'current_user': current_user,
+        'members_data': members_data,  # Pass the data list to the context
+    }
+
+    return render(request, 'dashboard.html', context)
 
 
 
@@ -110,18 +347,19 @@ def get_current_month_transaction(member):
     ).order_by('-receipt_date').first()
 
 
+def is_payment_due_this_month(member):
+    """Check if payment is due for the current month."""
+    transaction = get_current_month_transaction(member)
+    if transaction:
+        return False  # No payment is due if a transaction exists for the current month
+    return True
 
 
 
 
 
 
-
-
-
-
-
-def dashboard_old(request):
+def dashboard(request):
     current_user = request.session.get('current_user')
     if not current_user:
         return redirect('login')
@@ -171,31 +409,6 @@ def dashboard_old(request):
 
 
 
-
-
-
-
-
-from django.shortcuts import render, redirect
-from datetime import date
-from decimal import Decimal
-from django.db.models import Sum
-
-
-
-def dashboard(request):
-    current_user = request.session.get('current_user')
-    if not current_user:
-        return redirect('login')
-
-    members = Member.objects.all()
-
-    context = {
-        'current_user': current_user,
-        'members': members,
-    }
-
-    return render(request, 'dashboard.html', context)
 
 
 
@@ -376,7 +589,7 @@ def recepit_form_old(request,id):
 
 from django.utils.dateparse import parse_date
 
-def recepit_form66(request, id):
+def recepit_form(request, id):
     current_user = request.session.get('current_user')
     current_date = date.today()  # Set current date
     current_gold_rate_1_gram = Rate.objects.filter(date=current_date).first()
@@ -427,76 +640,6 @@ def recepit_form66(request, id):
         }
 
         return render(request, 'recepit_form.html', context)
-
-
-
-
-
-
-
-
-
-
-def recepit_form(request, id):
-    current_user = request.session.get('current_user')
-    current_date = date.today()  # Set current date
-    current_gold_rate_1_gram = Rate.objects.filter(date=current_date).first()
-    member = Member.objects.get(id=id)
-
-    if request.method == 'POST':
-        date_str = request.POST.get('date')  # Receipt date from the form (string)
-        receipt_date = parse_date(date_str)  # Convert string to date object
-        member_name = request.POST.get('member_name')
-        scheme_name = request.POST.get('scheme_name')
-        recepit_amount = Decimal(request.POST.get('recepit_amount'))
-        payment_mode = request.POST.get('payment_mode')
-        remark = request.POST.get('remark')
-        ent_by = request.POST.get('ent_by')
-
-        # Calculate installment in grams
-        installment_in_grams = float(recepit_amount) / current_gold_rate_1_gram.rate_1_gram
-
-        # Extract month and year from receipt_date
-        installment_month = receipt_date.month
-        installment_year = receipt_date.year
-
-        # Create and save the transaction
-        transaction = Transaction(
-            receipt_date=receipt_date,
-            member=member,
-            scheme_name=scheme_name,
-            receipt_amount=recepit_amount,
-            payment_mode=payment_mode,
-            transaction='receipt',
-            remarks=remark,
-            ent_by=ent_by,
-            installment_in_grams=installment_in_grams,
-            installment_month=installment_month,  # Save month
-            installment_year=installment_year  # Save year
-        )
-        transaction.save()
-
-        # --- Update Member Fields After Transaction ---
-        # member.total_paid_amount = member.calculate_total_paid_amount()
-        # member.paid_installments = member.calculate_paid_installments()
-        # member.due_installments = member.calculate_due_installments()
-        # member.pending_amount = member.calculate_pending_amount()
-        # member.save()
-        member.update_financials()
-
-        messages.success(request, 'Transaction Successful')
-        return redirect('recepit_form', id)
-
-    else:
-        context = {
-            'current_user': current_user,
-            'member': member,
-            'current_date': current_date,  # Pass the current date
-            'current_gold_rate_1_gram': current_gold_rate_1_gram
-        }
-
-        return render(request, 'recepit_form.html', context)
-
 
 import random
 import string
@@ -823,9 +966,6 @@ def add_member(request):
         }
 
         return render(request, 'member_regform.html', context)
-
-
-
 
 
 
@@ -1281,20 +1421,5 @@ class MemberListAPIView(APIView):
         Fetch all member details.
         """
         members = Member.objects.all()
-        serializer = MemberSerializer(members, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-class MemberByPhoneNumberAPIView(APIView):
-    def get(self, request, phone_number):
-        """
-        Fetch a member by phone number.
-        """
-        members = Member.objects.filter(phone_number=phone_number)
-        
-        if not members.exists():
-            raise NotFound(detail="No member found with the given phone number.")
-
         serializer = MemberSerializer(members, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

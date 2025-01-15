@@ -51,6 +51,10 @@ class MemberSerializer(serializers.ModelSerializer):
             'referred_person_referral_code',
             'member_referral_code',
             'referral_points',
+            'total_paid_amount',
+            'pending_amount',
+            'paid_installments',
+            'due_installments'
         ]
         read_only_fields = ['member_referral_code', 'referral_points']
 
@@ -73,3 +77,7 @@ class MemberSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Custom update method for additional logic if needed."""
         return super().update(instance, validated_data)
+
+
+
+

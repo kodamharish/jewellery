@@ -144,36 +144,35 @@ table.dataTable {
                     <th>Member Name</th>
                     <th>Scheme Name</th>
                     
-                    <th>Receipt Date</th>
-                    <th>Receipt Amount</th>
+                    
+                    <th>Scheme Amount</th>
+                    <th>Total Paid Amount</th>
+                    <th>Pending Amount</th>
+
                     <th>Paid Installments</th>
                     <th>Due Installments</th>
                     
                 </tr>
             </thead>
             <tbody>
-                {% for member_data in members_data %}
+                {% for member in members %}
                 <tr>
-                    <td>{{ member_data.member.id }}</td>
-                    <td>{{ member_data.member.name }}</td>
-                    <td>{{ member_data.member.scheme.scheme_name }}</td>
+                    <td>{{ member.id }}</td>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.scheme.scheme_name }}</td>
+                   
+                    <td>{{ member.phone_number }}</td>
+                    <td>{{ member.total_paid_amount }}</td>
+                    <td>{{ member.pending_amount }}</td>
 
-                    
-                    <td>
-                        {% if member_data.receipt_date %}
-                            {{ member_data.receipt_date|date:"Y-m-d" }}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ member_data.receipt_amount }}
-                    </td>
-                    <td>{{ member_data.total_paid_installments }}</td>
-                    <td>{{ member_data.due_installments }}</td>
-                    
+                    <td>{{ member.paid_installments }}</td>
+                    <td>{{ member.due_installments }}</td>
                 </tr>
-            {% endfor %}
+                {% empty %}
+                <tr>
+                    <td colspan="7">No data available.</td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

@@ -5,6 +5,8 @@ import string
 from datetime import date
 from datetime import date
 from django.db.models import Sum
+from decimal import Decimal
+
 
 
 def generate_referral_code():
@@ -68,7 +70,7 @@ class Member(models.Model):
     id = models.AutoField(primary_key=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True)
-    scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE)
+    scheme = models.ForeignKey('Scheme', on_delete=models.CASCADE)
     address = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100, null=True)
     pin = models.CharField(max_length=15, null=True)
@@ -79,46 +81,53 @@ class Member(models.Model):
     status = models.CharField(max_length=50, null=True)
     join_date = models.DateField()
     end_date = models.DateField()
-
-    # Nominee details
     nominee_name = models.CharField(max_length=50, null=True)
     nominee_email = models.EmailField(null=True)
     nominee_phone_number = models.IntegerField(null=True)
     nominee_aadhaar = models.CharField(max_length=50, null=True)
     nominee_pan = models.CharField(max_length=50, null=True)
-
-    # Referral details
     referred_person_name = models.CharField(max_length=50, null=True)
     referred_person_id = models.CharField(max_length=50, null=True)
     referred_person_referral_code = models.CharField(max_length=50, null=True)
     member_referral_code = models.CharField(max_length=8, unique=True, null=True)
     referral_points = models.IntegerField(default=0)
-
-    def save(self, *args, **kwargs):
-        if not self.member_referral_code:
-            self.member_referral_code = self._generate_unique_referral_code()
-        super().save(*args, **kwargs)
+    total_paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    pending_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    paid_installments = models.IntegerField(default=0)
+    due_installments = models.IntegerField(default=0)
 
     def _generate_unique_referral_code(self):
-        code = generate_referral_code()  # Ensure this function is defined elsewhere
+        code = generate_referral_code()
         while Member.objects.filter(member_referral_code=code).exists():
             code = generate_referral_code()
         return code
 
-    def total_amount(self):
-      return Decimal(Transaction.objects.filter(member=self).aggregate(total=models.Sum('receipt_amount'))['total'] or 0)
+    def calculate_total_paid_amount(self):
+        # Sum all receipt amounts linked to this member
+        return Decimal(Transaction.objects.filter(member=self).aggregate(total=Sum('receipt_amount'))['total'] or 0)
 
+    def calculate_paid_installments(self):
+        installment_amount = Decimal(self.scheme.scheme_installment_amount)
+        return int(self.total_paid_amount // installment_amount) if installment_amount > 0 else 0
 
-    
+    def calculate_due_installments(self):
+        total_installments = int(self.scheme.scheme_maturity_period)
+        return total_installments - self.paid_installments
 
-    def add_referral_points(self, points):
-        """Add referral points to the member."""
-        self.referral_points += points
+    def calculate_pending_amount(self):
+        installment_amount = Decimal(self.scheme.scheme_installment_amount)
+        return self.due_installments * installment_amount
+
+    def update_financials(self):
+        """Updates the member's financial fields after a transaction."""
+        self.total_paid_amount = self.calculate_total_paid_amount()
+        self.paid_installments = self.calculate_paid_installments()
+        self.due_installments = self.calculate_due_installments()
+        self.pending_amount = self.calculate_pending_amount()
         self.save()
 
     def __str__(self):
-        return str(self.id)
-
+        return f"{self.name} ({self.id})"
 
 # Transaction Model
 class Transaction(models.Model):
@@ -180,3 +189,5 @@ class Rate(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+

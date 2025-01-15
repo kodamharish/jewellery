@@ -46,5 +46,11 @@ class RateAdmin(admin.ModelAdmin):
     list_display = ('id','purity')
     
 admin.site.register(Rate,RateAdmin)
+
+
+
+
+    
+
 #username : admin
 #password : 12345

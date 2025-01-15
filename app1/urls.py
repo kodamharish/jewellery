@@ -40,9 +40,9 @@ urlpatterns = [
     #APIs
     path('api/add_member/', AddMemberAPIView.as_view(), name='api_add_member'),
     path('api/all-schemes/', SchemeListAPIView.as_view(), name='all_scheme_list'),
-    path('api/all-members/', MemberListAPIView.as_view(), name='all_members_list')
-
-    
+    path('api/all-members/', MemberListAPIView.as_view(), name='all_members_list'),
+    path('api/member/phone_number/<str:phone_number>/', MemberByPhoneNumberAPIView.as_view(), name='member_by_phone_number'),
+       
 
 
 
